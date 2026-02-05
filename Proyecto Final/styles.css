@@ -1,21 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
 
+/* =========================================================================================
+   VARIABLES GLOBALES
+   Definición de colores, fuentes y tokens de diseño para toda la aplicación.
+========================================================================================= */
 :root {
     --bg-dark: #060608;
-    /* Darker, almost pure black/blue tone from image */
+    /* Fondo principal muy oscuro */
     --bg-panel: #0a0a16;
+    /* Fondo para paneles y modales */
     --accent-cyan: #00f3ff;
+    /* Color de acento principal (Cyan Neon) */
     --accent-cyan-dim: rgba(0, 243, 255, 0.15);
+    /* Versión tenue del cyan para brillos */
     --accent-blue: #007bff;
+    /* Azul estándar */
     --accent-purple: #bc13fe;
+    /* Púrpura neón secundario */
     --badge-ready: #00f3ff;
+    /* Color para estado "Listo" */
     --badge-dev: #ff0055;
+    /* Color para estado "En Desarrollo" */
     --text-primary: #ffffff;
+    /* Texto principal blanco */
     --text-secondary: #a0a0b0;
+    /* Texto secundario grisáceo */
     --font-ui: 'Inter', sans-serif;
+    /* Fuente para interfaz general */
     --font-display: 'Orbitron', sans-serif;
+    /* Fuente tecnológica para títulos */
 }
 
+/* =========================================================================================
+   REINICIO Y ESTILOS BASE
+   Reset básico y configuración del cuerpo del documento.
+========================================================================================= */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -32,7 +51,7 @@ body {
     flex-direction: column;
 }
 
-/* Background Decoration */
+/* --- FONDO ANIMADO / DECORACIÓN --- */
 .bg-decoration {
     position: fixed;
     top: 0;
@@ -46,6 +65,7 @@ body {
     pointer-events: none;
 }
 
+/* --- CONTENEDOR PRINCIPAL (WRAPPER) --- */
 .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -56,11 +76,13 @@ body {
     padding: 0 40px;
 }
 
-/* --- HEADER --- */
+/* =========================================================================================
+   ENCABEZADO (HEADER)
+   Logo, Barra de Búsqueda y Navegación Superior.
+========================================================================================= */
 .main-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 30px 0;
     margin-bottom: 40px;
 }
@@ -69,8 +91,11 @@ body {
     display: flex;
     align-items: center;
     gap: 30px;
+    margin-right: auto;
+    /* Empuja el resto del contenido a la derecha */
 }
 
+/* --- LOGOTIPO --- */
 .logo-section {
     display: flex;
     align-items: center;
@@ -115,6 +140,7 @@ body {
     text-transform: uppercase;
 }
 
+/* --- BARRA DE BÚSQUEDA --- */
 .search-bar {
     display: flex;
     align-items: center;
@@ -146,9 +172,14 @@ body {
     font-size: 0.9rem;
 }
 
+/* --- MENÚ DE NAVEGACIÓN --- */
 .main-nav {
     display: flex;
     gap: 30px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    /* Línea separadora */
+    padding-right: 30px;
+    margin-right: 30px;
 }
 
 .nav-link {
@@ -168,18 +199,19 @@ body {
     content: '';
     position: absolute;
     top: -36px;
-    /* Align with top of header kind of */
     left: 0;
-    /* Changed from 50% / transform to cover width if needed, but let's keep it minimal */
     width: 100%;
     height: 4px;
     background: var(--accent-cyan);
     box-shadow: 0 0 10px var(--accent-cyan);
-    /* In the figma it might be an underline or a top pill, standardizing on simple active state for now */
     display: none;
-    /* Removing weird top bar for now, sticking to text color */
+    /* Oculto por diseño actual */
 }
 
+/* =========================================================================================
+   ACCIONES DE USUARIO
+   Botones de notificación, login, registro y perfil.
+========================================================================================= */
 .user-actions {
     display: flex;
     align-items: center;
@@ -205,37 +237,56 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
+/* Botón de Notificación (Campana) */
+.notification-btn svg {
+    stroke: var(--accent-cyan);
+    filter: drop-shadow(0 0 2px var(--accent-cyan));
+    transition: all 0.3s ease;
+}
+
+.notification-btn:hover svg {
+    stroke: #fff;
+    filter: drop-shadow(0 0 5px var(--accent-cyan));
+    transform: rotate(15deg);
+}
+
+/* Botones de Autenticación (Login/Register) */
 .auth-btn {
-    background: var(--accent-cyan);
-    color: #000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
+    background: rgba(20, 20, 35, 0.8);
+    border: 1px solid #00f3ff;
+    color: #00f3ff;
+    padding: 10px 24px;
+    border-radius: 30px;
     font-family: var(--font-display);
-    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     cursor: pointer;
-    box-shadow: 0 0 15px var(--accent-cyan-dim);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    font-size: 0.8rem;
 }
 
 .auth-btn:hover {
-    box-shadow: 0 0 25px var(--accent-cyan-dim);
-    transform: scale(1.05);
+    background: #00f3ff;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
 }
 
 .auth-btn.secondary {
-    background: transparent;
-    border: 1px solid var(--accent-cyan);
-    color: var(--accent-cyan);
-    box-shadow: none;
+    background: rgba(20, 20, 35, 0.8);
+    border: 1px solid #bc13fe;
+    color: #bc13fe;
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
 }
 
 .auth-btn.secondary:hover {
-    background: rgba(0, 243, 255, 0.1);
-    box-shadow: 0 0 15px var(--accent-cyan-dim);
+    background: #bc13fe;
+    color: white;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.6);
 }
 
-/* User Profile Static Styles */
+/* --- PERFIL DE USUARIO (ESTÁTICO) --- */
 #user-profile-static {
     display: flex;
     align-items: center;
@@ -273,17 +324,15 @@ body {
     transform: scale(1.1);
 }
 
-/* Legacy class kept for compatibility if needed, but styling moved to .user-logo-btn */
 .user-avatar-small {
     display: none;
-    /* Hidden as we moved it out */
+    /* Oculto, reemplazado por user-logo-btn */
 }
 
-.clicked-avatar {
-    box-shadow: 0 0 10px white;
-}
-
-/* --- GAME GRID / CAROUSEL --- */
+/* =========================================================================================
+   GALERÍA DE JUEGOS Y CARRUSEL
+   Estilos para el grid de juegos y las flechas de navegación.
+========================================================================================= */
 .content-area {
     position: relative;
     flex-grow: 1;
@@ -297,13 +346,13 @@ body {
     position: relative;
     width: 100%;
     max-width: 1300px;
-    /* Constrain grid width */
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
 }
 
+/* --- FLECHAS DE NAVEGACIÓN --- */
 .nav-arrow {
     background: var(--accent-cyan);
     border: none;
@@ -313,27 +362,55 @@ body {
     color: #000;
     font-size: 1.5rem;
     cursor: pointer;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
     box-shadow: 0 0 15px var(--accent-cyan-dim);
     flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .nav-arrow:hover {
-    transform: scale(1.1);
     box-shadow: 0 0 25px var(--accent-cyan);
 }
 
-/* Prev/Next arrow specific styles if needed in future */
+.prev-arrow {
+    left: -60px;
+    /* Posición fuera del grid */
+}
 
+.next-arrow {
+    right: -60px;
+    /* Posición fuera del grid */
+}
+
+/* Ajuste Responsivo para Pantallas Medianas */
+@media (max-width: 1450px) {
+    .prev-arrow {
+        left: 0;
+    }
+
+    .next-arrow {
+        right: 0;
+    }
+
+    .gallery-window {
+        padding: 10px 60px;
+        /* Añade padding para que las flechas no tapen el contenido */
+    }
+}
+
+/* --- CONTENEDOR DEL SLIDER --- */
 .gallery-container {
     position: relative;
     width: 100%;
     max-width: 1400px;
-    /* Allow enough space for arrows */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -343,7 +420,7 @@ body {
     width: 100%;
     overflow: hidden;
     padding: 10px;
-    /* Space for shadow/hover effects */
+    /* Espacio para sombras y efectos hover */
 }
 
 .gallery-track {
@@ -368,61 +445,14 @@ body {
     max-width: 1200px;
 }
 
-.nav-arrow {
-    background: var(--accent-cyan);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    color: #000;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-    box-shadow: 0 0 15px var(--accent-cyan-dim);
-    flex-shrink: 0;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.prev-arrow {
-    left: -60px;
-    /* Outside the grid */
-}
-
-.next-arrow {
-    right: -60px;
-    /* Outside the grid */
-}
-
-@media (max-width: 1450px) {
-    .prev-arrow {
-        left: 0;
-    }
-
-    .next-arrow {
-        right: 0;
-    }
-
-    .gallery-window {
-        padding: 10px 60px;
-        /* Add padding so arrows don't cover content */
-    }
-}
-
+/* --- TARJETAS DE JUEGO --- */
 .game-card {
     background: rgba(25, 25, 35, 0.4);
-    /* Slightly darker card bg */
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     position: relative;
     text-decoration: none;
     overflow: hidden;
-    /* Clean edges */
     transition: transform 0.3s ease;
     aspect-ratio: 16/10;
     display: flex;
@@ -434,6 +464,7 @@ body {
     border-color: rgba(0, 243, 255, 0.3);
 }
 
+/* Etiquetas de Estado (Ready / Dev) */
 .game-badge {
     position: absolute;
     top: 15px;
@@ -462,16 +493,15 @@ body {
     box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
 }
 
+/* Visuales de la Tarjeta */
 .card-visuals {
     flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    /* Add a subtle glow behind visuals */
     background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
     overflow: hidden;
-    /* Ensure image doesn't overflow rounded corners if any, though card has it too */
 }
 
 .game-img {
@@ -499,6 +529,7 @@ body {
     text-shadow: 0 0 5px var(--accent-cyan-dim);
 }
 
+/* Paginación (Puntos) */
 .carousel-dots {
     display: flex;
     justify-content: center;
@@ -516,10 +547,11 @@ body {
 
 .dot.active {
     background: #555;
-    /* In current design it looks subtle grey */
 }
 
-/* --- FOOTER --- */
+/* =========================================================================================
+   PIE DE PÁGINA (FOOTER)
+========================================================================================= */
 .main-footer {
     border-top: 1px solid var(--accent-cyan);
     padding: 40px 0;
@@ -560,6 +592,24 @@ body {
     gap: 20px;
     color: white;
     font-size: 1.5rem;
+    align-items: center;
+    /* Align items vertically */
+}
+
+.partner-item {
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    cursor: help;
+    /* Suggests tooltip on hover */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-item:hover {
+    color: var(--accent-cyan);
+    filter: drop-shadow(0 0 5px var(--accent-cyan));
+    transform: translateY(-3px);
 }
 
 .footer-copyright {
@@ -575,22 +625,26 @@ body {
 }
 
 .social-icon {
-    font-size: 1.5rem;
-    color: white;
+    color: var(--text-secondary);
     text-decoration: none;
-    opacity: 0.8;
-    transition: opacity 0.3s;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .social-icon:hover {
-    opacity: 1;
+    color: var(--accent-cyan);
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+    transform: translateY(-3px) rotate(5deg);
 }
 
-/* ========================================= */
-/*       PRESERVED GAME VISUALS (CSS ART)    */
-/* ========================================= */
+/* =========================================================================================
+   ARTE CSS / VISUALES DE JUEGOS
+   Estilos específicos para renderizar elementos visuales de los juegos con CSS puro.
+========================================================================================= */
 
-/* Blackjack Slot Visuals */
+/* --- BLACKJACK --- */
 .blackjack-slot .mini-card {
     width: 60px;
     height: 90px;
@@ -638,7 +692,7 @@ body {
     transform: rotate(20deg) translateX(20px) translateY(-5px);
 }
 
-/* Solitaire Slot Visuals */
+/* --- SOLITARIO --- */
 .solitaire-slot .card-visuals {
     perspective: 1000px;
 }
@@ -727,7 +781,7 @@ body {
     transform: rotate(40deg) translate(30px, 15px) scale(1.05);
 }
 
-/* Clicker Slot */
+/* --- CLICKER --- */
 .clicker-slot .cursor-icon {
     font-size: 4rem;
     color: white;
@@ -768,7 +822,7 @@ body {
     }
 }
 
-/* Impostor Slot (Kept CSS even if not in current grid, just in case) */
+/* --- IMPOSTOR (AMONG US STYLE) --- */
 .impostor-body {
     width: 60px;
     height: 80px;
@@ -855,7 +909,7 @@ body {
     }
 }
 
-/* Memory Slot */
+/* --- MEMORY --- */
 .memory-slot .neon-card {
     position: absolute;
     width: 50px;
@@ -893,7 +947,7 @@ body {
     transform: rotate(25deg) translate(30px, -10px) scale(1.1);
 }
 
-/* MecanoLAB Slot */
+/* --- MECANOLAB --- */
 .mecanolab-slot .keyboard-icon {
     font-size: 3rem;
     position: absolute;
@@ -918,7 +972,7 @@ body {
     animation: bounce 0.5s infinite alternate;
 }
 
-/* Aim Lab Slot */
+/* --- AIM LAB --- */
 .aimlab-target {
     width: 60px;
     height: 60px;
@@ -974,9 +1028,9 @@ body {
     }
 }
 
-/* ========================================= */
-/*           MODAL STYLES (Auth)             */
-/* ========================================= */
+/* =========================================================================================
+   VENTANAS MODALES (SISTEMA DE AUTENTICACIÓN)
+========================================================================================= */
 .auth-modal-overlay {
     position: fixed;
     top: 0;
@@ -1028,7 +1082,7 @@ body {
     font-size: 1.5rem;
 }
 
-/* Modal Inputs */
+/* Inputs del Formulario */
 .auth-form-group {
     margin-bottom: 15px;
     text-align: left;
@@ -1051,6 +1105,7 @@ body {
     box-shadow: 0 0 10px var(--accent-cyan-dim);
 }
 
+/* Botón de Envío */
 .submit-btn {
     width: 100%;
     padding: 12px;
@@ -1071,6 +1126,7 @@ body {
     filter: brightness(1.2);
 }
 
+/* Botón Cerrar Modal */
 .close-modal-btn {
     position: absolute;
     top: 15px;
@@ -1094,14 +1150,16 @@ body {
     min-height: 1.2rem;
 }
 
-/* Toast */
+/* =========================================================================================
+   NOTIFICACIONES EMERGENTES (TOASTS)
+========================================================================================= */
 .arcade-toast {
     position: fixed;
     bottom: 30px;
     right: 30px;
     background: rgba(0, 0, 0, 0.9);
-    border: 1px solid var(--accent-cyan);
-    color: var(--accent-cyan);
+    border: 1px solid #ffd700;
+    color: #ffd700;
     padding: 15px 25px;
     border-radius: 10px;
     font-family: var(--font-display);
@@ -1109,7 +1167,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 0 20px var(--accent-cyan-dim);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
     animation: slideInToast 0.5s ease-out forwards;
 }
 
@@ -1134,221 +1192,11 @@ body {
         transform: translateY(20px);
         opacity: 0;
     }
-}/* --- AUTH SYSTEM STYLES (Migrated from auth.js) --- */
-.auth-header-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    gap: 15px;
-    align-items: center;
 }
 
-.auth-btn {
-    background: rgba(20, 20, 35, 0.8);
-    border: 1px solid #00f3ff;
-    color: #00f3ff;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-    font-size: 0.8rem;
-}
-
-.auth-btn:hover {
-    background: #00f3ff;
-    color: #000;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
-}
-
-.auth-btn.secondary {
-    border-color: #bc13fe;
-    color: #bc13fe;
-    box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
-}
-
-.auth-btn.secondary:hover {
-    background: #bc13fe;
-    color: white;
-    box-shadow: 0 0 20px rgba(188, 19, 254, 0.6);
-}
-
-/* User Avatar */
-.user-profile-container {
-    position: relative;
-}
-
-.user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #444, #000);
-    border: 2px solid #00f3ff;
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.user-avatar:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
-}
-
-.user-avatar span {
-    font-size: 1.5rem;
-    filter: drop-shadow(0 0 5px white);
-}
-
-/* Points Badge on Avatar */
-.avatar-points {
-    position: absolute;
-    bottom: -5px;
-    right: -10px;
-    background: #ff0055;
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-family: 'Orbitron', sans-serif;
-    border: 1px solid white;
-}
-
-/* Dropdown */
-.user-dropdown {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background: rgba(15, 15, 30, 0.95);
-    border: 1px solid #00f3ff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    width: 200px;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    backdrop-filter: blur(10px);
-    z-index: 1001;
-}
-
-.user-dropdown.active {
-    display: flex;
-}
-
-.user-info-display {
-    color: #a0a0b0;
-    font-size: 0.8rem;
-    padding: 5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.points-display {
-    color: #ffd700;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    margin-top: 5px;
-    display: block;
-}
-
-.dropdown-btn {
-    background: transparent;
-    border: 1px solid #00f3ff;
-    color: white;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    transition: all 0.2s;
-}
-
-.dropdown-btn:hover {
-    background: rgba(0, 243, 255, 0.2);
-}
-
-.dropdown-btn.profile-action {
-    border-color: #bc13fe;
-}
-
-.dropdown-btn.profile-action:hover {
-    background: rgba(188, 19, 254, 0.2);
-}
-
-.dropdown-btn.logout-action {
-    border-color: #ff0055;
-    color: #ff0055;
-}
-
-.dropdown-btn.logout-action:hover {
-    background: #ff0055;
-    color: white;
-}
-
-/* Modals */
-.auth-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.auth-modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.auth-modal {
-    background: rgba(15, 15, 30, 0.98);
-    border: 1px solid #00f3ff;
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Inter', sans-serif;
-    display: none;
-}
-
-.auth-modal.active {
-    display: block;
-    transform: scale(1);
-}
-
-.auth-modal h2 {
-    font-family: 'Orbitron', sans-serif;
-    color: #00f3ff;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-    font-size: 1.5rem;
-}
-
-/* Dashboard Specific Styles */
+/* =========================================================================================
+   ESTILOS DE DASHBOARD (PANEL DE CONTROL)
+========================================================================================= */
 #modal-profile {
     max-width: 600px;
 }
@@ -1439,110 +1287,129 @@ body {
     font-size: 1.2rem;
 }
 
-/* TOAST NOTIFICATIONS */
-.arcade-toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid #ffd700;
-    color: #ffd700;
-    padding: 15px 25px;
+/* Controles de Autenticación en Header (Especificidad) */
+.auth-header-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Avatar de Usuario en Header */
+.user-profile-container {
+    position: relative;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #444, #000);
+    border: 2px solid #00f3ff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.user-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+}
+
+.user-avatar span {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px white);
+}
+
+.avatar-points {
+    position: absolute;
+    bottom: -5px;
+    right: -10px;
+    background: #ff0055;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
     border-radius: 10px;
     font-family: 'Orbitron', sans-serif;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    animation: slideInToast 0.5s ease-out forwards;
+    border: 1px solid white;
 }
 
-.arcade-toast.remove {
-    animation: fadeOutToast 0.5s ease-in forwards;
-}
-
-@keyframes slideInToast {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOutToast {
-    to {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-}
-
-/* Inputs & Standard Buttons */
-.auth-form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.auth-modal input {
-    width: 100%;
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: white;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-.auth-modal input:focus {
-    border-color: #00f3ff;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(45deg, #00f3ff, #bc13fe);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    font-size: 1rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: filter 0.3s ease;
-    font-family: 'Orbitron', sans-serif;
-    margin-top: 10px;
-}
-
-.submit-btn:hover {
-    filter: brightness(1.2);
-}
-
-.close-modal-btn {
+/* Menú Desplegable de Usuario */
+.user-dropdown {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
+    top: 60px;
+    right: 0;
+    background: rgba(15, 15, 30, 0.95);
+    border: 1px solid #00f3ff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    width: 200px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+}
+
+.user-dropdown.active {
+    display: flex;
+}
+
+.user-info-display {
     color: #a0a0b0;
-    font-size: 2rem;
+    font-size: 0.8rem;
+    padding: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.points-display {
+    color: #ffd700;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    margin-top: 5px;
+    display: block;
+}
+
+.dropdown-btn {
+    background: transparent;
+    border: 1px solid #00f3ff;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    line-height: 1;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    transition: all 0.2s;
 }
 
-.close-modal-btn:hover {
+.dropdown-btn:hover {
+    background: rgba(0, 243, 255, 0.2);
+}
+
+.dropdown-btn.profile-action {
+    border-color: #bc13fe;
+}
+
+.dropdown-btn.profile-action:hover {
+    background: rgba(188, 19, 254, 0.2);
+}
+
+.dropdown-btn.logout-action {
+    border-color: #ff0055;
     color: #ff0055;
 }
 
-.auth-error {
-    color: #ff0055;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    min-height: 1.2rem;
+.dropdown-btn.logout-action:hover {
+    background: #ff0055;
+    color: white;
 }

@@ -126,6 +126,7 @@ class AuthSystem {
             </ul>
 
             <button class="submit-btn" id="logoutActionBtn" style="background: transparent; border: 1px solid #ff0055; color: #ff0055;">Logout System</button>
+            <button class="submit-btn" id="logoutActionBtn" style="background: transparent; border: 1px solid #ff0055; color: #ff0055;">Logout System</button>
         </div>`;
 
         overlay.innerHTML = loginM + regM + dashM;
@@ -145,6 +146,14 @@ class AuthSystem {
         const switchBtn = document.getElementById('switchToReg');
         if (switchBtn) switchBtn.onclick = (e) => { e.preventDefault(); this.openModal('register'); };
 
+
+        // Locked Modal Actions
+        const goToLogin = document.getElementById('goToLoginBtn');
+        if (goToLogin) goToLogin.onclick = () => this.openModal('login');
+
+        const lockedToReg = document.getElementById('lockedToReg');
+        if (lockedToReg) lockedToReg.onclick = (e) => { e.preventDefault(); this.openModal('register'); };
+
         document.getElementById('logoutActionBtn').onclick = () => {
             this.logout();
             this.closeAllModals();
@@ -159,29 +168,27 @@ class AuthSystem {
     }
 
     attachGameInterceptors() {
-        const gallery = document.querySelector('.gallery-grid');
-        if (!gallery) return;
+        const cards = document.querySelectorAll('.game-card');
 
-        gallery.addEventListener('click', (e) => {
-            const card = e.target.closest('a.game-card');
-            if (card && card.getAttribute('href')) {
-                // If it has "dev" badge or similar logic, we can block it.
-                // For now, allow all clicks, just check auth.
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const href = card.getAttribute('href');
+                if (!href || href === '#' || href.startsWith('javascript')) return;
 
                 const user = this.getSession();
-                const url = card.getAttribute('href');
-                const title = card.querySelector('.game-title')?.innerText || 'Unknown Game';
 
-                // Optional: Force login to play?
-                // Let's allow guests to play for now, but track history if logged in.
-                if (user) {
-                    this.addToHistory(user, title, url);
+                if (!user) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    this.showToast("⚠️ Login required to play");
+                    return false;
                 }
 
-                // Proceed
-                // e.preventDefault(); window.location.href = url; // Default behavior is fine
-            }
-        }, true);
+                const title = card.querySelector('.game-title')?.innerText || 'Unknown Game';
+                this.addToHistory(user, title, href);
+            }, true);
+        });
     }
 
     // --- LOGIC ---
@@ -281,7 +288,8 @@ class AuthSystem {
         document.querySelectorAll('.auth-modal input').forEach(i => i.value = '');
 
         overlay.classList.add('active');
-        [loginM, regM, dashM].forEach(m => m.classList.remove('active'));
+        overlay.classList.add('active');
+        [loginM, regM, dashM].forEach(m => { if (m) m.classList.remove('active'); });
 
         if (type === 'login') {
             loginM.classList.add('active');
