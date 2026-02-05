@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <a href="../../index.html" class="back-link">← Back to Gallery</a>
+            <h1>Blackjack</h1>
+        </header>
+
+        <main class="table">
+            <div class="dealer-area">
+                <h2>Dealer <span id="dealer-score" class="score-badge"></span></h2>
+                <div id="dealer-cards" class="hand">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <div class="info-area">
+                <div id="message" class="message">Good Luck!</div>
+            </div>
+
+            <div class="player-area">
+                <h2>Player <span id="player-score" class="score-badge"></span></h2>
+                <div id="player-cards" class="hand">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="btn-hit" class="btn">Hit</button>
+                <button id="btn-stand" class="btn">Stand</button>
+                <button id="btn-new-game" class="btn special" style="display: none;">New Game</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

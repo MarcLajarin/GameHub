@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Impostor | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <a href="../../index.html" class="back-link">← Back to Gallery</a>
+            <div id="game-status">WAITING FOR TASKS...</div>
+            <div id="role-display" class="role-badge">ROLE: ???</div>
+        </header>
+
+        <main class="active-area">
+            <canvas id="game-canvas"></canvas>
+            <div class="controls-hint">
+                <span>WASD to Move</span>
+                <span>SPACE to Interact/Kill</span>
+            </div>
+        </main>
+
+        <!-- End Screen Overlay -->
+        <div id="end-screen" class="overlay" style="display: none;">
+            <div class="result-box">
+                <h1 id="end-message">VICTORY</h1>
+                <button id="restart-btn">PLAY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

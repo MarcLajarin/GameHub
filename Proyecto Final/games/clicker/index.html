@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Clicker | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="particle-container"></div>
+
+    <div class="game-container">
+        <header>
+            <a href="../../index.html" class="back-link">← Back to Gallery</a>
+            <div class="header-stats">
+                <span id="bps-count">0.0</span> / sec
+            </div>
+        </header>
+
+        <main class="active-area">
+            <div class="score-display">
+                <h1 id="bit-count">0</h1>
+                <span class="currency-label">BITS</span>
+            </div>
+
+            <button id="main-button">
+                <div class="button-inner">
+                    <span class="icon">➤</span>
+                </div>
+                <div class="button-glow"></div>
+            </button>
+        </main>
+
+        <aside class="shop-panel">
+            <h2>Upgrades</h2>
+            <div id="shop-items" class="shop-list">
+                <!-- Items injected by JS -->
+            </div>
+        </aside>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

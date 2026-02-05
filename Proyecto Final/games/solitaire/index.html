@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <a href="../../index.html" class="back-link">← Back to Gallery</a>
+            <h1>Solitaire</h1>
+        </header>
+
+        <main class="board">
+            <div class="top-row">
+                <div class="stock-waste-area">
+                    <div id="stock" class="pile stock">
+                        <!-- Stock cards -->
+                    </div>
+                    <div id="waste" class="pile waste">
+                        <!-- Waste cards -->
+                    </div>
+                </div>
+
+                <div class="foundations-area">
+                    <div id="f-spades" class="pile foundation"></div>
+                    <div id="f-hearts" class="pile foundation"></div>
+                    <div id="f-diamonds" class="pile foundation"></div>
+                    <div id="f-clubs" class="pile foundation"></div>
+                </div>
+            </div>
+
+            <div class="tableau-area">
+                <div id="t-0" class="column"></div>
+                <div id="t-1" class="column"></div>
+                <div id="t-2" class="column"></div>
+                <div id="t-3" class="column"></div>
+                <div id="t-4" class="column"></div>
+                <div id="t-5" class="column"></div>
+                <div id="t-6" class="column"></div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

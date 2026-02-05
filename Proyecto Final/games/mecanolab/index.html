@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecanoLAB | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back</a>
+            </div>
+            <div class="header-center">
+                <div class="stats-panel">
+                    <span class="stat-item">LIVES: <span id="lives">❤️❤️❤️</span></span>
+                    <span class="stat-item">TIME: <span id="time">60</span>s</span>
+                    <span class="stat-item">PROGRESS: <span id="progress">0/5</span></span>
+                </div>
+            </div>
+        </header>
+
+        <main id="classroom-view">
+            <div class="blackboard-container">
+                <div class="blackboard">
+                    <div id="target-text" class="chalk-text">Prepare to type...</div>
+                </div>
+                <div class="chalk-tray">
+                    <div class="chalk white"></div>
+                    <div class="duster"></div>
+                </div>
+            </div>
+
+            <div class="desk-container">
+                <div class="paper-sheet">
+                    <div class="paper-lines">
+                        <div id="user-input" class="handwritten-text"></div>
+                        <div class="cursor">|</div>
+                    </div>
+                </div>
+                <div class="pencil"></div>
+            </div>
+
+            <div id="start-screen" class="overlay">
+                <div class="overlay-content">
+                    <h1>MecanoLAB</h1>
+                    <p>Type 5 phrases correctly. Don't make mistakes.</p>
+                    <button id="start-btn" class="chalk-btn">START LESSON</button>
+                </div>
+            </div>
+
+            <div id="end-screen" class="overlay" style="display: none;">
+                <div class="overlay-content">
+                    <h1 id="end-title">CLASS DISMISSED</h1>
+                    <p id="end-message">You failed.</p>
+                    <button id="restart-btn" class="chalk-btn">TRY AGAIN</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

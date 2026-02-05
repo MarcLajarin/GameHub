@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Aim | Premium Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back to Gallery</a>
+            </div>
+            <div class="header-center">
+                <div id="game-status">PRESS START</div>
+            </div>
+            <div class="header-right">
+                <div class="stat-box">SCORE: <span id="score">0</span></div>
+                <div class="stat-box">TIME: <span id="time">60</span>s</div>
+            </div>
+        </header>
+
+        <main id="game-area">
+            <!-- Crosshair is handled via CSS cursor, but we can add a visual overlay if needed -->
+            <div id="start-screen" class="overlay">
+                <div class="content-box">
+                    <h1>NEON AIM</h1>
+                    <p>Hit the targets before time runs out!</p>
+                    <button id="start-btn" class="neon-btn">START MISSION</button>
+                </div>
+            </div>
+
+            <div id="end-screen" class="overlay" style="display: none;">
+                <div class="content-box">
+                    <h1>MISSION COMPLETE</h1>
+                    <p>Final Score: <span id="final-score">0</span></p>
+                    <button id="restart-btn" class="neon-btn">PLAY AGAIN</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

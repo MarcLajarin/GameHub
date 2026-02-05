@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Gallery | Premium Arcade</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Background Decoration -->
+    <div class="bg-decoration"></div>
+
+    <div class="page-wrapper">
+        <!-- New Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <span class="logo-g">G</span>
+                    </div>
+                    <span class="logo-text">GAMEHUB</span>
+                </div>
+
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Discover any World, challenges ...">
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <a href="#" class="nav-link active">Discover</a>
+                <a href="#" class="nav-link">Games</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
+
+            <div class="user-actions">
+                <button class="icon-btn notification-btn">
+                    🔔
+                </button>
+
+                <!-- Guest Controls (Visible when NOT logged in) -->
+                <div id="guest-controls" style="display: flex; gap: 15px;">
+                    <button id="header-login-btn" class="auth-btn">Login</button>
+                    <button id="header-reg-btn" class="auth-btn secondary">Register</button>
+                </div>
+
+                <!-- Logged In Controls (Visible when logged in) -->
+                <div id="logged-in-controls" style="display: none; align-items: center; gap: 15px;">
+                    <div class="points-badge" id="static-points-display">0 pts</div>
+                    <button class="user-logo-btn" id="nav-user-btn">👤</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+
+            <div class="gallery-container">
+                <button class="nav-arrow prev-arrow" id="prevBtn">❮</button>
+
+                <div class="gallery-window">
+                    <div class="gallery-track" id="gallery-track">
+                        <!-- Slide 1 -->
+                        <div class="gallery-slide">
+                            <div class="gallery-grid">
+                                <!-- Slot 1: Blackjack -->
+                                <a href="games/blackjack/index.html" class="game-card blackjack-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Blackjack.png" alt="Blackjack" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">BlackJack</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 2: Solitaire -->
+                                <a href="games/solitaire/index.html" class="game-card solitaire-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/solitario.png" alt="Solitario" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Solitario</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 4: Neon Clicker -->
+                                <a href="games/clicker/index.html" class="game-card clicker-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Clicker.png" alt="Clicker" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Clicker</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 7: Neon Aim -->
+                                <a href="games/aimlab/index.html" class="game-card aimlab-slot">
+                                    <div class="game-badge dev">In Development</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Aim.png" alt="Neon Aim" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Neon Aim</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 6: Memory -->
+                                <a href="games/memory/index.html" class="game-card memory-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/memori.png" alt="Memory" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Memory</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 8: MecanoLAB -->
+                                <a href="games/mecanolab/index.html" class="game-card mecanolab-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/mecanografia.png" alt="Mecanolab" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Mecanolab</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="gallery-slide">
+                            <div class="gallery-grid">
+                                <!-- Slot 3: Impostor -->
+                                <a href="games/impostor/index.html" class="game-card impostor-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <!-- Placeholder image -->
+                                        <img src="img/logotipo.png" alt="Impostor" class="game-img"
+                                            style="object-fit: contain; padding: 20px;">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Neon Impostor</div>
+                                    </div>
+                                </a>
+
+                                <!-- Slot 5: Penalty -->
+                                <a href="games/penalty/index.html" class="game-card penalty-slot">
+                                    <div class="game-badge dev">In Development</div>
+                                    <div class="card-visuals">
+                                        <!-- Placeholder image -->
+                                        <img src="img/logotipo.png" alt="Penalty" class="game-img"
+                                            style="object-fit: contain; padding: 20px;">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Penalty Shootout</div>
+                                    </div>
+                                </a>
+
+                                <!-- Placeholder Duplicate 1 to fill grid -->
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="nav-arrow next-arrow" id="nextBtn">❯</button>
+            </div>
+
+            <!-- Dots -->
+            <div class="carousel-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-left">
+                <div class="logo-icon small">
+                    <span class="logo-g">G</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Discover</a>
+                <a href="#">Games</a>
+                <a href="#">About</a>
+            </div>
+
+            <div class="footer-partners">
+                <span class="partner-logo">R</span> <!-- Example placeholders -->
+                <span class="partner-logo">✔</span>
+                <span class="partner-logo">👁</span>
+            </div>
+
+            <div class="footer-copyright">
+                © 2026 GAMEHUB // PROTOCOL_V.2.0.4 // ALL_RIGHTS_RESERVED
+            </div>
+
+            <div class="footer-social">
+                <a href="#" class="social-icon">🎵</a>
+                <a href="#" class="social-icon">✖</a> <!-- X logo -->
+                <a href="#" class="social-icon">📷</a>
+            </div>
+        </footer>
+    </div>
+    <script src="auth.js" defer></script>
+    <script src="gallery.js" defer></script>
+</body>
+
+</html>

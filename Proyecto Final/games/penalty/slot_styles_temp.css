@@ -1,0 +1,36 @@
+/* ... previous styles ... */
+
+/* Penalty Slot Visuals */
+.penalty-slot .card-visuals {
+    width: 120px;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.penalty-slot .goal-net {
+    width: 100px;
+    height: 60px;
+    border: 2px solid white;
+    border-bottom: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255, 255, 255, 0.1) 5px, rgba(255, 255, 255, 0.1) 6px),
+        repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255, 255, 255, 0.1) 5px, rgba(255, 255, 255, 0.1) 6px);
+    position: absolute;
+    bottom: 10px;
+}
+
+.penalty-slot .neon-ball {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 5px var(--accent-color));
+    position: absolute;
+    bottom: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.penalty-slot:hover .neon-ball {
+    transform: translateY(-40px) scale(1.2);
+    filter: drop-shadow(0 0 15px var(--accent-color));
+}
