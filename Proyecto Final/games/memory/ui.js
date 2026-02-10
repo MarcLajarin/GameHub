@@ -41,6 +41,7 @@ export class MemoryUI {
         const state = this.game.getState();
 
         // Dynamic Grid Sizing
+        // Dynamic Grid Sizing
         this.grid.style.gridTemplateColumns = `repeat(${state.gridSize.cols}, 1fr)`;
         // Adjust card size based on density if needed, or let CSS flex handle it.
         // For very large grids, we might want to scale down the cards via CSS variable or class

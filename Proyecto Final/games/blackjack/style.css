@@ -1,15 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
 
 :root {
-    --bg-color: #050510;
-    --table-color: #1a472a;
-    --table-border: #2d5e3e;
-    --accent-gold: #ffd700;
+    /* Main Theme Colors */
+    --bg-dark: #060608;
+    --bg-panel: #0a0a16;
+    --accent-cyan: #00f3ff;
+    --accent-cyan-dim: rgba(0, 243, 255, 0.15);
+    --accent-purple: #bc13fe;
     --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+
+    /* Game Specific */
+    --table-color: #0a0a16;
+    /* Dark tech panel instead of green felt */
+    --table-border: #00f3ff;
+    --card-bg: #ffffff;
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--bg-dark);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -17,6 +26,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image:
+        radial-gradient(circle at 15% 20%, var(--accent-cyan-dim) 0%, transparent 25%),
+        radial-gradient(circle at 85% 80%, rgba(188, 19, 254, 0.05) 0%, transparent 25%);
 }
 
 .game-container {
@@ -33,34 +45,72 @@ header {
 }
 
 .back-link {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.3s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .back-link:hover {
-    color: white;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px var(--accent-cyan-dim);
 }
 
 h1 {
     font-family: 'Orbitron', sans-serif;
     margin: 0;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    font-size: 2rem;
+    letter-spacing: 2px;
 }
 
+/* --- THE TABLE (GAME BOARD) --- */
 .table {
-    background: radial-gradient(circle, #245c38 0%, #0e2e1a 100%);
-    border: 15px solid #3e2723;
-    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(20, 20, 35, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+    border: 2px solid var(--accent-cyan);
+    border-radius: 20px;
     padding: 40px;
     box-shadow:
-        inset 0 0 50px rgba(0, 0, 0, 0.8),
-        0 20px 50px rgba(0, 0, 0, 0.5);
+        0 0 20px var(--accent-cyan-dim),
+        inset 0 0 30px rgba(0, 0, 0, 0.8);
     position: relative;
     min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    backdrop-filter: blur(10px);
+}
+
+/* Dealer / Player Areas */
+h2 {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.score-badge {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--accent-cyan);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
 }
 
 .hand {
@@ -71,6 +121,7 @@ h1 {
     perspective: 1000px;
 }
 
+/* --- CARDS --- */
 .card {
     width: 90px;
     height: 140px;
@@ -80,18 +131,24 @@ h1 {
     justify-content: center;
     align-items: center;
     position: relative;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     font-family: 'Courier New', serif;
     font-weight: bold;
     font-size: 1.2rem;
     user-select: none;
     animation: deal 0.5s ease-out forwards;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px var(--accent-cyan-dim);
 }
 
 @keyframes deal {
     from {
         opacity: 0;
-        transform: translateY(-50px) rotate(180deg);
+        transform: translateY(-50px) rotate(10deg);
     }
 
     to {
@@ -129,86 +186,98 @@ h1 {
 }
 
 .card.hidden {
-    background: repeating-linear-gradient(45deg,
-            #b71c1c,
-            #b71c1c 10px,
-            #c62828 10px,
-            #c62828 20px);
-    border: 2px solid white;
+    background:
+        linear-gradient(135deg, #111 25%, transparent 25%) -10px 0,
+        linear-gradient(225deg, #111 25%, transparent 25%) -10px 0,
+        linear-gradient(315deg, #111 25%, transparent 25%),
+        linear-gradient(45deg, #111 25%, transparent 25%);
+    background-size: 20px 20px;
+    background-color: #222;
+    border: 2px solid var(--text-secondary);
+}
+
+/* --- MESSAGE & CONTROLS --- */
+.info-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3rem;
 }
 
 .message {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-family: 'Orbitron', sans-serif;
-    color: var(--accent-gold);
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    min-height: 2rem;
-    margin: 20px 0;
+    color: var(--accent-purple);
+    text-shadow: 0 0 8px rgba(188, 19, 254, 0.5);
+    letter-spacing: 1px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(188, 19, 254, 0.3);
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
 }
 
 .controls {
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .btn {
-    padding: 12px 30px;
+    padding: 12px 35px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     border: none;
     border-radius: 8px;
+    /* Slightly squarer than main site for "tech" feel */
     cursor: pointer;
-    transition: all 0.2s;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    background: rgba(20, 20, 35, 0.8);
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
 }
 
 .btn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--accent-cyan);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .btn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+    border-color: #555;
+    color: #777;
+    box-shadow: none;
 }
 
+/* Stand Button - Maybe vary color? Keep uniform for now or distinct? 
+   Let's keep them uniform cyan for consistency, or make Stand purple/warning?
+   Let's stick to the main theme: outlines mostly.
+*/
+
 .btn.special {
-    background: var(--accent-gold);
-    color: black;
-    font-weight: bold;
+    background: rgba(20, 20, 35, 0.8);
+    border: 1px solid var(--accent-purple);
+    color: var(--accent-purple);
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
 }
 
 .btn.special:hover {
-    background: #ffea00;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-}
-
-h2 {
-    text-align: center;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.score-badge {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--accent-gold);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    min-width: 30px;
-    text-align: center;
+    background: var(--accent-purple);
+    color: white;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.6);
 }

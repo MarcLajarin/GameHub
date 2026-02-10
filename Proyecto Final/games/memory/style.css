@@ -21,11 +21,14 @@ body {
 }
 
 .game-container {
-    width: 600px;
-    padding: 20px;
+    width: auto;
+    max-width: 1200px;
+    margin: 20px;
+    padding: 30px;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     border: 1px solid #333;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
 header {
@@ -43,7 +46,7 @@ header {
 
 .stats {
     display: flex;
-    gap: 20px;
+    gap: 30px;
     font-family: 'Orbitron';
     font-size: 1.2rem;
     color: var(--accent);
@@ -51,14 +54,18 @@ header {
 
 .memory-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    /* grid-template-columns set by JS */
+    gap: 10px;
     perspective: 1000px;
+    justify-content: center;
 }
 
 .card {
     background: transparent;
-    height: 120px;
+    height: 90px;
+    /* Reduced from 120px to make board shorter */
+    aspect-ratio: 3/4;
+    /* Maintain consistant ratio */
     cursor: pointer;
     perspective: 1000px;
 }

@@ -1,21 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
 
 :root {
-    --bg-color: #050510;
-    --accent-color: #ff0055;
-    --accent-glow: #ff00aa;
-    --secondary-color: #00f3ff;
-    --glass-bg: rgba(255, 255, 255, 0.05);
+    /* Main Theme Colors matching other games */
+    --bg-dark: #060608;
+    --accent-cyan: #00f3ff;
+    --accent-cyan-dim: rgba(0, 243, 255, 0.15);
+    --accent-purple: #bc13fe;
+    --accent-purple-dim: rgba(188, 19, 254, 0.15);
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+
+    /* Game Specific */
+    --glass-panel: rgba(20, 20, 35, 0.6);
+    --glass-border: rgba(0, 243, 255, 0.2);
 }
 
 body {
-    background-color: var(--bg-color);
-    color: white;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     margin: 0;
     min-height: 100vh;
     overflow: hidden;
+    /* Prevent scrolling from particles */
     user-select: none;
+    background-image:
+        radial-gradient(circle at 15% 20%, var(--accent-cyan-dim) 0%, transparent 25%),
+        radial-gradient(circle at 85% 80%, rgba(188, 19, 254, 0.05) 0%, transparent 25%);
 }
 
 #particle-container {
@@ -30,18 +41,19 @@ body {
 
 .game-container {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 380px;
+    /* Slightly wider shop */
     height: 100vh;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
 /* Header */
 header {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 370px;
+    top: 30px;
+    left: 40px;
+    right: 420px;
     /* clear shop */
     display: flex;
     justify-content: space-between;
@@ -50,20 +62,26 @@ header {
 }
 
 .back-link {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.3s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .back-link:hover {
-    color: white;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px var(--accent-cyan-dim);
 }
 
 .header-stats {
     font-family: 'Orbitron', sans-serif;
-    color: var(--secondary-color);
+    color: var(--accent-cyan);
     font-size: 1.2rem;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    text-shadow: 0 0 10px var(--accent-cyan-dim);
+    letter-spacing: 1px;
 }
 
 /* Main Click Area */
@@ -72,134 +90,198 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 60px;
+    gap: 80px;
     position: relative;
-    background: radial-gradient(circle at center, rgba(255, 0, 85, 0.1) 0%, transparent 60%);
 }
 
 .score-display {
     text-align: center;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 #bit-count {
     font-family: 'Orbitron', sans-serif;
     font-size: 5rem;
     margin: 0;
-    background: linear-gradient(to bottom, white, #e0e0e0);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+    line-height: 1;
+    color: white;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 .currency-label {
-    font-size: 1.5rem;
-    color: var(--accent-color);
-    letter-spacing: 4px;
+    font-size: 1.2rem;
+    color: var(--accent-purple);
+    letter-spacing: 6px;
     text-transform: uppercase;
+    font-weight: 600;
+    text-shadow: 0 0 5px var(--accent-purple-dim);
 }
 
-/* Big Button */
+/* Big Button - Tech Reactor Style */
 #main-button {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
     border: none;
     background: transparent;
     cursor: pointer;
     position: relative;
-    transition: transform 0.05s ease;
+    transition: transform 0.05s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     outline: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+#main-button:active {
+    transform: scale(0.95);
 }
 
 .button-inner {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: radial-gradient(circle at 30% 30%, #1a1a2e, #000);
     border-radius: 50%;
-    border: 4px solid var(--accent-color);
+    border: 2px solid var(--accent-cyan);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 30px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(255, 0, 85, 0.2);
+    box-shadow:
+        0 0 30px var(--accent-cyan-dim),
+        inset 0 0 30px rgba(0, 0, 0, 0.8);
     position: relative;
     z-index: 2;
+    overflow: hidden;
+}
+
+/* Tech rings inside button */
+.button-inner::before {
+    content: '';
+    position: absolute;
+    inset: 15px;
+    border: 1px dashed rgba(0, 243, 255, 0.3);
+    border-radius: 50%;
+    animation: rotate 10s linear infinite;
+}
+
+.button-inner::after {
+    content: '';
+    position: absolute;
+    inset: 30px;
+    border: 1px solid rgba(188, 19, 254, 0.3);
+    border-radius: 50%;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .button-inner .icon {
     font-size: 4rem;
     color: white;
-    transform: rotate(-45deg);
-    text-shadow: 0 0 10px white;
+    z-index: 5;
+    filter: drop-shadow(0 0 10px var(--accent-cyan));
+    transition: all 0.2s;
+}
+
+#main-button:hover .button-inner .icon {
+    transform: scale(1.1);
+    color: var(--accent-cyan);
 }
 
 .button-glow {
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
     border-radius: 50%;
-    border: 2px solid var(--accent-glow);
+    border: 1px solid var(--accent-cyan);
+    opacity: 0.3;
     animation: pulse 2s infinite;
-    opacity: 0.5;
     z-index: 1;
 }
 
 @keyframes pulse {
     0% {
         transform: scale(1);
-        opacity: 0.5;
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.1;
     }
 
     100% {
-        transform: scale(1.2);
-        opacity: 0;
+        transform: scale(1);
+        opacity: 0.3;
     }
 }
 
 /* Shop Panel */
 .shop-panel {
-    background: rgba(10, 10, 20, 0.95);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 30px;
+    background: rgba(10, 10, 15, 0.8);
+    border-left: 1px solid var(--glass-border);
+    padding: 40px 30px;
     overflow-y: auto;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
 }
 
 .shop-panel h2 {
     font-family: 'Orbitron', sans-serif;
-    color: var(--secondary-color);
+    color: var(--text-primary);
+    font-size: 1.5rem;
     margin-bottom: 30px;
-    border-bottom: 2px solid var(--secondary-color);
-    padding-bottom: 10px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.shop-panel h2::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-purple), transparent);
 }
 
 .shop-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .shop-item {
-    background: var(--glass-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .shop-item:hover:not(.disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--secondary-color);
+    background: rgba(0, 243, 255, 0.05);
+    border-color: var(--accent-cyan);
     transform: translateX(-5px);
+    box-shadow: 0 0 15px var(--accent-cyan-dim);
 }
 
 .shop-item.disabled {
@@ -211,29 +293,42 @@ header {
 .item-info {
     display: flex;
     flex-direction: column;
+    gap: 5px;
 }
 
 .item-name {
     font-weight: 600;
     font-size: 1.1rem;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
 }
 
 .item-cost {
-    color: var(--accent-color);
+    color: var(--accent-purple);
     font-size: 0.9rem;
-    margin-top: 5px;
+    font-weight: bold;
 }
 
 .item-stats {
     text-align: right;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.item-amount {
+    font-size: 1.5rem;
+    font-family: 'Orbitron', sans-serif;
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
 }
 
 .item-power {
-    display: block;
-    color: var(--secondary-color);
-    margin-top: 3px;
+    color: var(--accent-cyan);
+    font-size: 0.8rem;
+    margin-top: 2px;
 }
 
 /* Particles & Effects */
@@ -241,62 +336,63 @@ header {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: var(--accent-color);
+    background: var(--accent-cyan);
     border-radius: 50%;
-    animation: fade-move 0.6s ease-out forwards;
+    animation: fade-move 0.8s ease-out forwards;
     pointer-events: none;
-    box-shadow: 0 0 10px var(--accent-glow);
+    box-shadow: 0 0 10px var(--accent-cyan);
 }
 
 @keyframes fade-move {
     0% {
         opacity: 1;
-        transform: translate(0, 0);
+        transform: translate(0, 0) scale(1.5);
     }
 
     100% {
         opacity: 0;
-        transform: translate(var(--tx), var(--ty));
+        transform: translate(var(--tx), var(--ty)) scale(0.5);
     }
 }
 
 .floating-text {
     position: fixed;
     color: white;
+    font-family: 'Orbitron', sans-serif;
     font-weight: bold;
     font-size: 1.2rem;
     pointer-events: none;
-    animation: float-up 0.8s ease-out forwards;
-    text-shadow: 0 0 5px black;
+    animation: float-up 1s ease-out forwards;
+    text-shadow: 0 0 10px var(--accent-purple);
     z-index: 101;
 }
 
 @keyframes float-up {
     0% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 
     100% {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-50px) scale(1.2);
     }
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #050510;
+    background: black;
 }
 
 ::-webkit-scrollbar-thumb {
     background: #333;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--accent-cyan);
 }

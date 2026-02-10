@@ -1,22 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredericka+the+Great&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Fira+Code:wght@400;600&display=swap');
 
 :root {
-    --bg-color: #3d3b30;
-    --board-color: #2b3a28;
-    /* Dark Green */
-    --chalk-color: #f7fff7;
-    --paper-color: #f0f0f0;
-    --ink-color: #1a1a2e;
-    --wood-color: #5d4037;
+    /* Main Theme Colors */
+    --bg-dark: #060608;
+    --accent-cyan: #00f3ff;
+    --accent-cyan-dim: rgba(0, 243, 255, 0.15);
+    --accent-purple: #bc13fe;
+
+    /* Terminal Colors */
+    --term-bg: #0a0a12;
+    --term-text: #00f3ff;
+    --input-bg: rgba(20, 20, 35, 0.8);
+    --error-color: #ff0055;
 }
 
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--bg-color);
-    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-dark);
+    font-family: 'Fira Code', monospace;
     overflow: hidden;
     color: white;
+    background-image:
+        radial-gradient(circle at 15% 20%, var(--accent-cyan-dim) 0%, transparent 25%),
+        radial-gradient(circle at 85% 80%, rgba(188, 19, 254, 0.05) 0%, transparent 25%);
 }
 
 .game-container {
@@ -24,31 +31,45 @@ body {
     flex-direction: column;
     height: 100vh;
     width: 100vw;
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-        repeating-linear-gradient(90deg, transparent 0, transparent 40px, rgba(255, 255, 255, 0.05) 40px, rgba(255, 255, 255, 0.05) 41px);
 }
 
+/* Header */
 header {
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: transparent;
     z-index: 10;
 }
 
 .back-link {
-    color: #ffd700;
+    color: #a0a0b0;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.back-link:hover {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px var(--accent-cyan-dim);
 }
 
 .stats-panel {
     display: flex;
-    gap: 30px;
-    font-size: 1.5rem;
-    font-family: 'Fredericka the Great', cursive;
+    gap: 40px;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px var(--accent-cyan-dim);
+}
+
+.stat-item {
+    background: rgba(0, 243, 255, 0.05);
+    padding: 5px 15px;
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 4px;
 }
 
 #classroom-view {
@@ -57,127 +78,109 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 40px;
     padding: 20px;
-    position: relative;
-    perspective: 1000px;
 }
 
-/* Blackboard */
+/* MAIN DISPLAY (Formerly Blackboard) */
 .blackboard-container {
     position: relative;
     width: 80%;
-    max-width: 800px;
+    max-width: 900px;
 }
 
 .blackboard {
-    background-color: var(--board-color);
-    border: 15px solid var(--wood-color);
-    border-radius: 5px;
-    height: 200px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    background-color: var(--term-bg);
+    border: 2px solid var(--accent-cyan);
+    border-radius: 10px;
+    height: 250px;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 50px rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 40px;
     position: relative;
+    overflow: hidden;
 }
 
+/* Scanline effect */
 .blackboard::before {
-    /* Chalk dust texture overlay */
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
-    opacity: 0.3;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
     pointer-events: none;
+    z-index: 2;
 }
 
 .chalk-text {
-    font-family: 'Fredericka the Great', cursive;
-    color: var(--chalk-color);
-    font-size: 2.5rem;
+    font-family: 'Fira Code', monospace;
+    color: var(--accent-cyan);
+    font-size: 2.2rem;
     text-align: center;
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 10px var(--accent-cyan);
     width: 100%;
+    z-index: 1;
 }
 
-.chalk-tray {
-    position: absolute;
-    bottom: -10px;
-    /* Slight overlap for perspective */
-    left: 5%;
-    width: 90%;
-    height: 15px;
-    background: #4a342e;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
+/* Hide Skumorphic elements */
+.chalk-tray,
+.duster,
+.chalk,
+.pencil {
+    display: none;
 }
 
-.duster {
-    width: 60px;
-    height: 20px;
-    background: #8b5a2b;
-    border-bottom: 5px solid #333;
-    /* Felt */
-    margin-right: 20px;
-    transform: rotate(-5deg);
-}
-
-.chalk {
-    width: 40px;
-    height: 8px;
-    background: white;
-    border-radius: 2px;
-}
-
-/* Paper */
+/* INPUT AREA (Formerly Paper) */
 .desk-container {
     position: relative;
     width: 60%;
-    max-width: 600px;
-    transform: rotateX(20deg);
-    /* Tilt effect */
+    max-width: 700px;
+    /* No rotation */
 }
 
 .paper-sheet {
-    background: var(--paper-color);
-    height: 150px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: var(--input-bg);
+    height: 100px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
+    border: 1px solid var(--accent-purple);
+    border-radius: 8px;
     position: relative;
-    transition: transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
 }
 
 .paper-lines {
+    /* Remove lines, just flex centering */
     width: 100%;
-    height: 100%;
-    border-bottom: 2px solid #aaddff;
     display: flex;
-    align-items: flex-end;
-    /* Text sits on bottom line */
-    padding-bottom: 5px;
-    /* Lined paper pattern */
-    background-image: repeating-linear-gradient(transparent, transparent 29px, #aaddff 30px);
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
 }
 
 .handwritten-text {
-    font-family: 'Caveat', cursive;
-    font-size: 2.5rem;
-    color: var(--ink-color);
+    font-family: 'Fira Code', monospace;
+    font-size: 2rem;
+    color: white;
+    /* Input text is white */
     min-width: 10px;
     white-space: pre;
+    font-weight: 600;
 }
 
 .cursor {
-    font-family: 'Caveat', cursive;
-    font-size: 2.5rem;
-    color: var(--ink-color);
+    font-family: 'Fira Code', monospace;
+    font-size: 2rem;
+    color: var(--accent-purple);
     animation: blink 1s infinite;
-    margin-left: 2px;
+    margin-left: 5px;
+    font-weight: bold;
 }
 
 @keyframes blink {
@@ -188,30 +191,32 @@ header {
 
 /* Animations */
 .shake {
-    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+    animation: glitch 0.3s cubic-bezier(.36, .07, .19, .97) both;
+    color: var(--error-color);
+    text-shadow: 2px 0 var(--accent-cyan), -2px 0 var(--accent-purple);
 }
 
-@keyframes shake {
+@keyframes glitch {
 
     10%,
     90% {
-        transform: translate3d(-1px, 0, 0) rotateX(20deg);
+        transform: translate3d(-2px, 0, 0);
     }
 
     20%,
     80% {
-        transform: translate3d(2px, 0, 0) rotateX(20deg);
+        transform: translate3d(4px, 0, 0);
     }
 
     30%,
     50%,
     70% {
-        transform: translate3d(-4px, 0, 0) rotateX(20deg);
+        transform: translate3d(-6px, 0, 0);
     }
 
     40%,
     60% {
-        transform: translate3d(4px, 0, 0) rotateX(20deg);
+        transform: translate3d(6px, 0, 0);
     }
 }
 
@@ -219,34 +224,56 @@ header {
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100;
+    backdrop-filter: blur(8px);
 }
 
 .overlay-content {
-    background: var(--board-color);
-    border: 10px solid var(--wood-color);
-    padding: 40px;
+    background: #0a0a12;
+    border: 2px solid var(--accent-cyan);
+    padding: 60px;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 15px;
+    box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px var(--accent-cyan);
+}
+
+p {
+    color: #a0a0b0;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
 }
 
 .chalk-btn {
-    background: transparent;
-    border: 2px solid var(--chalk-color);
-    color: var(--chalk-color);
-    font-family: 'Fredericka the Great', cursive;
-    font-size: 1.5rem;
-    padding: 10px 30px;
+    background: rgba(0, 243, 255, 0.1);
+    border: 2px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    padding: 12px 40px;
     margin-top: 20px;
     cursor: pointer;
     transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
 }
 
 .chalk-btn:hover {
-    background: var(--chalk-color);
-    color: var(--board-color);
+    background: var(--accent-cyan);
+    color: black;
+    box-shadow: 0 0 30px var(--accent-cyan);
+    transform: scale(1.05);
 }
