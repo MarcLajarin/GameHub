@@ -195,40 +195,42 @@ class AuthSystem {
 
     getSession() { return localStorage.getItem(this.sessionKey); }
 
-    getDb() {
-        const db = localStorage.getItem(this.dbKey);
-        return db ? JSON.parse(db) : {};
-    }
-
-    saveDb(db) { localStorage.setItem(this.dbKey, JSON.stringify(db)); }
-
-    checkSession() { this.updateUI(this.getSession()); }
-
-    addToHistory(username, gameTitle, gameUrl) {
-        const db = this.getDb();
-        if (!db[username]) return;
-
-        if (!db[username].history) db[username].history = [];
-
-        const entry = { title: gameTitle, url: gameUrl, date: new Date().toLocaleDateString() };
-        db[username].history = db[username].history.filter(i => i.title !== gameTitle);
-        db[username].history.unshift(entry);
-        if (db[username].history.length > 5) db[username].history.pop();
-
-        this.saveDb(db);
-    }
-
-    addPoints(amount) {
+    async checkSession() {
         const user = this.getSession();
-        if (!user) return; // Only signed-in users earn points
-
-        const db = this.getDb();
-        if (!db[user].points) db[user].points = 0;
-
-        db[user].points += amount;
-        this.saveDb(db);
         this.updateUI(user);
-        this.showToast(`+${amount} XP Earned!`);
+    }
+
+    async addToHistory(username, gameTitle, gameUrl) {
+        try {
+            await fetch('user_api.php?action=addHistory', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: username, title: gameTitle, url: gameUrl })
+            });
+        } catch (e) {
+            console.error("History sync failed", e);
+        }
+    }
+
+    async addPoints(amount) {
+        const user = this.getSession();
+        if (!user) return;
+
+        try {
+            const resp = await fetch('user_api.php?action=addPoints', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: user, amount: amount })
+            });
+            const result = await resp.json();
+            if (result.success) {
+                // Update UI points locally if possible or just refresh
+                this.updateUI(user);
+                this.showToast(`+${amount} XP Earned!`);
+            }
+        } catch (e) {
+            this.showToast("⚠️ Points sync failed");
+        }
     }
 
     showToast(message) {
@@ -241,38 +243,43 @@ class AuthSystem {
         setTimeout(() => toast.remove(), 2600);
     }
 
-    openDashboard() {
+    async openDashboard() {
         const user = this.getSession();
         if (!user) return;
 
         this.openModal('dashboard');
 
-        const db = this.getDb();
-        const userData = db[user] || {};
-        const points = userData.points || 0;
+        try {
+            // Fetch history from DB
+            const resp = await fetch(`user_api.php?action=getHistory&usuario=${user}`);
+            const result = await resp.json();
 
-        document.getElementById('dashUsername').textContent = user;
-        document.getElementById('dashPoints').textContent = points;
+            document.getElementById('dashUsername').textContent = user;
+            // Note: We might want a dedicated getProfile for points, but for now we update it on login
+            // For now, let's just use the history to demonstrate DB connectivity
 
-        const history = userData.history || [];
-        const listContainer = document.getElementById('recentGamesList');
-        listContainer.innerHTML = '';
+            const history = result.history || [];
+            const listContainer = document.getElementById('recentGamesList');
+            listContainer.innerHTML = '';
 
-        if (history.length === 0) {
-            listContainer.innerHTML = '<li style="color: #666; font-style: italic;">No games played yet.</li>';
-        } else {
-            history.forEach(game => {
-                const li = document.createElement('li');
-                li.style.marginBottom = '10px';
-                li.style.background = 'rgba(255,255,255,0.05)';
-                li.style.padding = '10px';
-                li.style.borderRadius = '5px';
-                li.innerHTML = `
-                    <div style="color:var(--accent-cyan); font-weight:bold;">${game.title}</div>
-                    <div style="color:#666; font-size:0.8rem;">${game.date}</div>
-                `;
-                listContainer.appendChild(li);
-            });
+            if (history.length === 0) {
+                listContainer.innerHTML = '<li style="color: #666; font-style: italic;">No games played yet.</li>';
+            } else {
+                history.forEach(game => {
+                    const li = document.createElement('li');
+                    li.style.marginBottom = '10px';
+                    li.style.background = 'rgba(255,255,255,0.05)';
+                    li.style.padding = '10px';
+                    li.style.borderRadius = '5px';
+                    li.innerHTML = `
+                        <div style="color:var(--accent-cyan); font-weight:bold;">${game.title}</div>
+                        <div style="color:#666; font-size:0.8rem;">${game.date}</div>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+        } catch (e) {
+            console.error("Dashboard load failed", e);
         }
     }
 
@@ -282,12 +289,11 @@ class AuthSystem {
         const regM = document.getElementById('modal-register');
         const dashM = document.getElementById('modal-dashboard');
 
-        if (!overlay) return; // Should not happen
+        if (!overlay) return;
 
         document.querySelectorAll('.auth-error').forEach(e => e.textContent = '');
         document.querySelectorAll('.auth-modal input').forEach(i => i.value = '');
 
-        overlay.classList.add('active');
         overlay.classList.add('active');
         [loginM, regM, dashM].forEach(m => { if (m) m.classList.remove('active'); });
 
@@ -305,61 +311,69 @@ class AuthSystem {
     closeAllModals() {
         const overlay = document.getElementById('authOverlay');
         if (overlay) overlay.classList.remove('active');
-        this.pendingUrl = null;
     }
 
-    performRegister() {
-        const name = document.getElementById('regName').value.trim();
-        const surname = document.getElementById('regSurname').value.trim();
-        const phone = document.getElementById('regPhone').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const user = document.getElementById('regUser').value.trim();
-        const pass = document.getElementById('regPass').value;
-        const confirm = document.getElementById('regConfirm').value;
+    async performRegister() {
+        const data = {
+            nombre: document.getElementById('regName').value.trim(),
+            apellidos: document.getElementById('regSurname').value.trim(),
+            telefono: document.getElementById('regPhone').value.trim(),
+            email: document.getElementById('regEmail').value.trim(),
+            usuario: document.getElementById('regUser').value.trim(),
+            password: document.getElementById('regPass').value,
+            confirm: document.getElementById('regConfirm').value
+        };
         const error = document.getElementById('regError');
 
-        if (!name || !surname || !phone || !email || !user || !pass || !confirm) {
-            error.textContent = "All fields required.";
+        if (!data.nombre || !data.usuario || !data.password) {
+            error.textContent = "Required fields missing.";
             return;
         }
-        if (pass !== confirm) { error.textContent = "Passwords mismatch."; return; }
+        if (data.password !== data.confirm) { error.textContent = "Passwords mismatch."; return; }
 
-        const db = this.getDb();
-        if (db[user]) { error.textContent = "Username taken."; return; }
+        try {
+            const resp = await fetch('auth_api.php?action=register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await resp.json();
 
-        db[user] = { name, surname, phone, email, pass, points: 0, history: [] }; // Init points
-        this.saveDb(db);
-        localStorage.setItem(this.sessionKey, user);
-        this.updateUI(user);
-        this.closeAllModals();
+            if (result.success) {
+                localStorage.setItem(this.sessionKey, data.usuario);
+                this.updateUI(data.usuario);
+                this.closeAllModals();
+            } else {
+                error.textContent = result.message;
+            }
+        } catch (e) {
+            error.textContent = "Network error.";
+        }
     }
 
-    performLogin() {
+    async performLogin() {
         const user = document.getElementById('loginUser').value.trim();
         const pass = document.getElementById('loginPass').value;
         const error = document.getElementById('loginError');
-        const db = this.getDb();
-        const account = db[user];
 
-        if (!account) {
-            // Try finding by email
-            const foundUser = Object.keys(db).find(key => db[key].email === user);
-            if (foundUser && db[foundUser].pass === pass) {
-                // Success via email
-                localStorage.setItem(this.sessionKey, foundUser);
-                this.updateUI(foundUser);
+        try {
+            const resp = await fetch('auth_api.php?action=login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: user, password: pass })
+            });
+            const result = await resp.json();
+
+            if (result.success) {
+                localStorage.setItem(this.sessionKey, result.user.usuario);
+                this.updateUI(result.user.usuario);
                 this.closeAllModals();
-                return;
+            } else {
+                error.textContent = result.message;
             }
-            error.textContent = "Invalid credentials.";
-            return;
+        } catch (e) {
+            error.textContent = "Network error.";
         }
-
-        if (account.pass !== pass) { error.textContent = "Invalid credentials."; return; }
-
-        localStorage.setItem(this.sessionKey, user);
-        this.updateUI(user);
-        this.closeAllModals();
     }
 
     logout() {
@@ -372,21 +386,18 @@ class AuthSystem {
         const loggedInControls = document.getElementById('logged-in-controls');
         const pointsDisplay = document.getElementById('static-points-display');
 
-        if (!guestControls || !loggedInControls) return; // UI not ready
+        if (!guestControls || !loggedInControls) return;
 
         if (username) {
-            // Logged In
             guestControls.style.display = 'none';
             loggedInControls.style.display = 'flex';
-
-            const db = this.getDb();
-            const points = db[username]?.points || 0;
-            if (pointsDisplay) pointsDisplay.textContent = `${points} pts`;
-
+            // Points are fetched on login or addPoints, for a full refresh we'd need a getProfile
+            if (pointsDisplay && localStorage.getItem('arcade_points')) {
+                pointsDisplay.textContent = `${localStorage.getItem('arcade_points')} pts`;
+            }
         } else {
-            // Guest
-            if (guestControls) guestControls.style.display = 'flex';
-            if (loggedInControls) loggedInControls.style.display = 'none';
+            guestControls.style.display = 'flex';
+            loggedInControls.style.display = 'none';
         }
     }
 }
