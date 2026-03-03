@@ -26,7 +26,8 @@ export class MemoryGame {
         switch (difficulty) {
             case 'easy': rows = 6; cols = 6; break;
             case 'standard':
-            case 'normal': rows = 8; cols = 8; break;
+            case 'normal':
+            case 'medium': rows = 8; cols = 8; break;
             case 'hard': rows = 10; cols = 10; break;
             case 'extreme': rows = 6; cols = 15; break; // 90 cards
             default: rows = 8; cols = 8;

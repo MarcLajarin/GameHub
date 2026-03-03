@@ -9,11 +9,23 @@ export class GameUI {
         this.startBtn = document.getElementById('start-btn');
         this.restartBtn = document.getElementById('restart-btn');
         this.gameStatus = document.getElementById('game-status');
+        this.diffBtns = document.querySelectorAll('.diff-btn');
     }
 
     init(callbacks) {
         this.startBtn.addEventListener('click', () => callbacks.onStartGame());
         this.restartBtn.addEventListener('click', () => callbacks.onRestartGame());
+
+        this.diffBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.diffBtns.forEach(b => b.classList.remove('active'));
+                const target = e.target;
+                target.classList.add('active');
+                if (callbacks.onSelectDifficulty) {
+                    callbacks.onSelectDifficulty(target.getAttribute('data-diff'));
+                }
+            });
+        });
     }
 
     updateHUD(state) {
@@ -25,6 +37,17 @@ export class GameUI {
         this.startScreen.style.display = 'flex';
         this.endScreen.style.display = 'none';
         this.gameStatus.textContent = 'PRESS START';
+
+        // Select the right difficulty button initially
+        const currentDiff = localStorage.getItem('arcadeDifficulty') || 'medium';
+        this.diffBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-diff') === currentDiff ||
+                (btn.getAttribute('data-diff') === 'medium' && currentDiff === 'standard') ||
+                (btn.getAttribute('data-diff') === 'medium' && currentDiff === 'normal')) {
+                btn.classList.add('active');
+            }
+        });
 
         // Remove old targets
         const targets = document.querySelectorAll('.target');

@@ -8,6 +8,12 @@ export class ImpostorGame {
         this.meetingCooldown = 0;
         this.mapWidth = 1600;
         this.mapHeight = 1200;
+        this.difficulty = 'medium';
+        this.botSpeed = 2.5;
+    }
+
+    setDifficulty(diff) {
+        this.difficulty = diff;
     }
 
     init() {
@@ -47,15 +53,15 @@ export class ImpostorGame {
             });
         }
 
-        // Assign Roles randomly
-        // 2 Impostors for 9 players balance? Or just 1? 
-        // User asked for "like the impostor game", usually 2 impostors for 10 players.
-        // Let's stick to 2 Impostors total.
+        let targetImpostors = 2;
+        if (this.difficulty === 'easy') { targetImpostors = 1; this.botSpeed = 1.5; }
+        else if (this.difficulty === 'hard') { targetImpostors = 3; this.botSpeed = 4.0; }
+        else { targetImpostors = 2; this.botSpeed = 2.5; }
 
         let impostorCount = 0;
 
-        // Chance for user to be Impostor (2/9 chance approx)
-        if (Math.random() < 0.22) {
+        // Chance for user to be Impostor
+        if (Math.random() < (targetImpostors / 9.0)) {
             this.players[0].role = 'impostor';
             this.myRole = 'impostor';
             impostorCount++;
@@ -67,7 +73,7 @@ export class ImpostorGame {
         // Assign remaining Impostors to bots
         const bots = this.players.filter(p => !p.isUser);
 
-        while (impostorCount < 2) {
+        while (impostorCount < targetImpostors) {
             const randomBot = bots[Math.floor(Math.random() * bots.length)];
             if (randomBot.role !== 'impostor') {
                 randomBot.role = 'impostor';
@@ -136,7 +142,7 @@ export class ImpostorGame {
         const dx = bot.taskTarget.x - bot.x;
         const dy = bot.taskTarget.y - bot.y;
         const dist = Math.hypot(dx, dy);
-        const speed = 2.5;
+        const speed = this.botSpeed;
 
         if (dist > 5) {
             bot.x += (dx / dist) * speed;

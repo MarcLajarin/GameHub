@@ -6,17 +6,33 @@ export class PenaltyGame {
         this.maxRounds = 5;
         this.gameOver = false;
         this.history = [];
+        this.difficulty = 'medium';
+    }
+
+    setDifficulty(diff) {
+        this.difficulty = diff;
     }
 
     shoot(direction) {
         if (this.gameOver) return this.getState();
 
-        // 6 Zones: TL, TC, TR, BL, BC, BR (Top/Bottom - Left/Center/Right)
+        // 6 Zones: TL, TC, TR, BL, BC, BR
         const zones = ['TL', 'TC', 'TR', 'BL', 'BC', 'BR'];
-        const goalieDirection = zones[Math.floor(Math.random() * zones.length)];
+        let saveChance = 1 / 6;
+        if (this.difficulty === 'easy') saveChance = 0.1; // 10%
+        if (this.difficulty === 'hard') saveChance = 0.4; // 40%
 
-        // Win logic: Goal if player zone != goalie zone
-        const isGoal = direction !== goalieDirection;
+        const willSave = Math.random() < saveChance;
+        let goalieDirection = '';
+
+        if (willSave) {
+            goalieDirection = direction;
+        } else {
+            const otherZones = zones.filter(z => z !== direction);
+            goalieDirection = otherZones[Math.floor(Math.random() * otherZones.length)];
+        }
+
+        const isGoal = !willSave;
 
         if (isGoal) {
             this.playerScore++;

@@ -136,3 +136,36 @@ canvas {
 #restart-btn:hover {
     transform: scale(1.1);
 }
+
+/* --- DIFFICULTY SELECTOR --- */
+.difficulty-options {
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.diff-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid #555;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    font-family: 'Orbitron', sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.diff-btn:hover {
+    border-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+}
+
+.diff-btn.active {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+}

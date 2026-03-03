@@ -277,3 +277,37 @@ p {
     box-shadow: 0 0 30px var(--accent-cyan);
     transform: scale(1.05);
 }
+
+/* --- DIFFICULTY SELECTOR --- */
+.difficulty-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 2rem;
+}
+
+.diff-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.diff-btn:hover {
+    color: white;
+    border-color: white;
+    text-shadow: 0 0 5px white;
+}
+
+.diff-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    text-shadow: 0 0 10px white;
+}

@@ -396,3 +396,36 @@ header {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-cyan);
 }
+
+/* --- DIFFICULTY SELECTOR --- */
+.difficulty-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 0 20px;
+}
+
+.diff-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid #555;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+    font-family: 'Orbitron', sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.diff-btn:hover {
+    border-color: var(--accent-cyan);
+    color: var(--text-primary);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+}
+
+.diff-btn.active {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+}

@@ -13,11 +13,23 @@ export class ClickerGame {
 
         this.lastTime = 0;
         this.accumulatedFraction = 0;
+        this.difficulty = 'medium';
+    }
+
+    setDifficulty(diff) {
+        this.difficulty = diff;
+    }
+
+    getMultiplier() {
+        if (this.difficulty === 'easy') return 2;
+        if (this.difficulty === 'hard') return 0.5;
+        return 1;
     }
 
     click() {
-        this.bits += this.clickPower;
-        return { bits: this.bits, added: this.clickPower };
+        const added = this.clickPower * this.getMultiplier();
+        this.bits += added;
+        return { bits: this.bits, added: added };
     }
 
     buyUpgrade(id) {
@@ -34,7 +46,7 @@ export class ClickerGame {
 
     update(deltaTime) {
         // Add auto generated bits
-        const generated = this.autoClickPower * deltaTime;
+        const generated = this.autoClickPower * deltaTime * this.getMultiplier();
         this.bits += generated;
 
         return { bits: this.bits };
@@ -43,8 +55,8 @@ export class ClickerGame {
     getState() {
         return {
             bits: Math.floor(this.bits),
-            clickPower: this.clickPower,
-            autoClickPower: this.autoClickPower,
+            clickPower: this.clickPower * this.getMultiplier(),
+            autoClickPower: this.autoClickPower * this.getMultiplier(),
             upgrades: this.upgrades
         };
     }

@@ -11,8 +11,15 @@
 <body>
     <div class="game-container">
         <header>
-            <a href="../../index.html" class="back-link">← Back to Gallery</a>
-            <h1>Solitaire</h1>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <a href="../../index.html" class="back-link">← Back to Gallery</a>
+                <h1>Solitaire</h1>
+            </div>
+            <div class="difficulty-options">
+                <button class="diff-btn" data-diff="easy">Fácil</button>
+                <button class="diff-btn active" data-diff="medium">Medio</button>
+                <button class="diff-btn" data-diff="hard">Difícil</button>
+            </div>
         </header>
 
         <main class="board">

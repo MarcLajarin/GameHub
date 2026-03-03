@@ -1,6 +1,6 @@
 export class GameLogic {
     constructor() {
-        this.phrases = [
+        this.allPhrases = [
             "No habéis programado ni una puta línea de código",
             "The quick brown fox jumps over the lazy dog",
             "To be or not to be that is the question",
@@ -20,6 +20,8 @@ export class GameLogic {
 
         ];
 
+        this.difficulty = 'medium';
+
         this.lives = 3;
         this.timeLeft = 60;
         this.isPlaying = false;
@@ -28,6 +30,16 @@ export class GameLogic {
         this.currentPhrase = "";
         this.inputIndex = 0; // Tracks correct chars typed
         this.timerInterval = null;
+    }
+
+    setDifficulty(diff) {
+        this.difficulty = diff;
+    }
+
+    getPhrases() {
+        if (this.difficulty === 'easy') return this.allPhrases.filter(p => p.length <= 30);
+        if (this.difficulty === 'hard') return this.allPhrases.filter(p => p.length >= 45);
+        return this.allPhrases;
     }
 
     reset() {
@@ -56,8 +68,9 @@ export class GameLogic {
     }
 
     nextPhrase() {
-        const randomIndex = Math.floor(Math.random() * this.phrases.length);
-        this.currentPhrase = this.phrases[randomIndex];
+        const phrases = this.getPhrases();
+        const randomIndex = Math.floor(Math.random() * phrases.length);
+        this.currentPhrase = phrases[randomIndex];
         this.inputIndex = 0;
         if (this.callbacks.onNewPhrase) this.callbacks.onNewPhrase(this.currentPhrase);
     }

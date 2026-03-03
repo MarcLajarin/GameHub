@@ -7,6 +7,12 @@ export class SolitaireGame {
         this.waste = [];
         this.foundations = { '♠': [], '♥': [], '♦': [], '♣': [] };
         this.tableau = [[], [], [], [], [], [], []];
+        this.difficulty = 'medium';
+        this.recycles = 0;
+    }
+
+    setDifficulty(diff) {
+        this.difficulty = diff;
     }
 
     resetGame() {
@@ -15,6 +21,7 @@ export class SolitaireGame {
         this.waste = [];
         this.foundations = { '♠': [], '♥': [], '♦': [], '♣': [] };
         this.tableau = [[], [], [], [], [], [], []];
+        this.recycles = 0;
 
         // Deal to Tableau
         for (let i = 0; i < 7; i++) {
@@ -32,16 +39,27 @@ export class SolitaireGame {
     }
 
     flipStock() {
+        let drawCount = 1;
+        if (this.difficulty === 'medium' || this.difficulty === 'hard') {
+            drawCount = 3;
+        }
+
         if (this.stock.length === 0) {
             // Recycle waste to stock
+            if (this.difficulty === 'hard' && this.recycles >= 3) {
+                return this.getState(); // Out of recycles
+            }
             if (this.waste.length > 0) {
                 this.stock = this.waste.reverse().map(c => ({ ...c, faceUp: false }));
                 this.waste = [];
+                this.recycles++;
             }
         } else {
-            const card = this.stock.pop();
-            card.faceUp = true;
-            this.waste.push(card);
+            for (let i = 0; i < drawCount && this.stock.length > 0; i++) {
+                const card = this.stock.pop();
+                card.faceUp = true;
+                this.waste.push(card);
+            }
         }
         return this.getState();
     }

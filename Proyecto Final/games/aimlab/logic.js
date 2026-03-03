@@ -73,6 +73,7 @@ export class GameLogic {
                 break;
             case 'standard':
             case 'normal':
+            case 'medium':
                 baseDelay = 1000;
                 minDelay = 400;
                 speedMultiplier = 10;
