@@ -7,7 +7,6 @@ export class BlackjackGame {
         this.dealerHand = [];
         this.gameOver = false;
         this.message = '';
-        this.difficulty = 'medium';
     }
 
     startGame() {
@@ -87,15 +86,7 @@ export class BlackjackGame {
         } else if (playerScore < dealerScore) {
             this.message = 'Dealer Wins!';
         } else {
-            // Push calculation based on difficulty
-            if (this.difficulty === 'easy') {
-                this.message = 'Tie - You Win (Easy)!';
-                if (window.ArcadeAuth) window.ArcadeAuth.addPoints(3);
-            } else if (this.difficulty === 'hard') {
-                this.message = 'Tie - Dealer Wins (Hard)!';
-            } else {
-                this.message = 'Push!';
-            }
+            this.message = 'Push!';
         }
     }
 
