@@ -39,54 +39,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('nextBtn');
     const dots = document.querySelectorAll('.dot');
 
-    if (!track || !prevBtn || !nextBtn) return; // Guard clause
+    if (track && prevBtn && nextBtn) {
+        let currentSlide = 0;
+        const slideCount = track.children.length; // Should be 2 slides currently
 
-    let currentSlide = 0;
-    const slideCount = track.children.length; // Should be 2 slides currently
+        function updateCarousel() {
+            const translateX = -(currentSlide * 100);
+            track.style.transform = `translateX(${translateX}%)`;
 
-    function updateCarousel() {
-        const translateX = -(currentSlide * 100);
-        track.style.transform = `translateX(${translateX}%)`;
+            // Update dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
 
-        // Update dots
-        dots.forEach((dot, index) => {
-            if (index === currentSlide) {
-                dot.classList.add('active');
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slideCount - 1) {
+                currentSlide++;
             } else {
-                dot.classList.remove('active');
+                currentSlide = 0; // Loop back to start
             }
-        });
-
-        // Loop handling or disabled states?
-        // User asked for "slider", infinite loop is nicer usually, or simple bounded.
-        // Let's do Bounded for now as it's easier to follow "next -> next" logic.
-        // Actually, let's do Infinite Loop for better UX if they only have 2 pages.
-        // But for simple translation, Bounded is standard.
-    }
-
-    nextBtn.addEventListener('click', () => {
-        if (currentSlide < slideCount - 1) {
-            currentSlide++;
-        } else {
-            currentSlide = 0; // Loop back to start
-        }
-        updateCarousel();
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentSlide > 0) {
-            currentSlide--;
-        } else {
-            currentSlide = slideCount - 1; // Loop to end
-        }
-        updateCarousel();
-    });
-
-    // Handle Dot Clicks
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            currentSlide = index;
             updateCarousel();
         });
-    });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+            } else {
+                currentSlide = slideCount - 1; // Loop to end
+            }
+            updateCarousel();
+        });
+
+        // Handle Dot Clicks
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+    }
 });
