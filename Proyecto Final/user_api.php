@@ -17,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($action === 'getHistory') {
         getHistory($pdo, $_GET['usuario']);
+    } elseif ($action === 'getProfile') {
+        getProfile($pdo, $_GET['usuario']);
     }
 }
 
@@ -57,6 +59,21 @@ function getHistory($pdo, $username) {
         $stmt->execute([$username]);
         $history = $stmt->fetchAll();
         echo JSON_encode(['success' => true, 'history' => $history]);
+    } catch (Exception $e) {
+        echo JSON_encode(['success' => false]);
+    }
+}
+
+function getProfile($pdo, $username) {
+    try {
+        $stmt = $pdo->prepare("SELECT nombre, apellidos, email, telefono, usuario, puntos, created_at FROM usuarios WHERE usuario = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
+        if ($user) {
+            echo JSON_encode(['success' => true, 'user' => $user]);
+        } else {
+            echo JSON_encode(['success' => false, 'message' => 'User not found']);
+        }
     } catch (Exception $e) {
         echo JSON_encode(['success' => false]);
     }

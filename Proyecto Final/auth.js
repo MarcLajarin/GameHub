@@ -107,7 +107,7 @@ class AuthSystem {
             <div class="auth-error" id="regError"></div>
         </div>`;
 
-        // Dashboard Modal (Simplified for now)
+        // Dashboard Modal
         const dashM = `<div class="auth-modal" id="modal-dashboard" style="max-width: 500px;">
             <button class="close-modal-btn">&times;</button>
             <h2>Agent Dashboard</h2>
@@ -125,8 +125,10 @@ class AuthSystem {
                 <!-- Dynamic Items -->
             </ul>
 
-            <button class="submit-btn" id="logoutActionBtn" style="background: transparent; border: 1px solid #ff0055; color: #ff0055;">Logout System</button>
-            <button class="submit-btn" id="logoutActionBtn" style="background: transparent; border: 1px solid #ff0055; color: #ff0055;">Logout System</button>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="submit-btn" id="viewProfileBtn" style="background: #007bff; border: 1px solid #007bff; color: #fff; flex: 1;">Ver Perfil</button>
+                <button class="submit-btn" id="logoutActionBtn" style="background: transparent; border: 1px solid #ff0055; color: #ff0055; flex: 1;">Logout System</button>
+            </div>
         </div>`;
 
         overlay.innerHTML = loginM + regM + dashM;
@@ -157,6 +159,11 @@ class AuthSystem {
         document.getElementById('logoutActionBtn').onclick = () => {
             this.logout();
             this.closeAllModals();
+        };
+
+        document.getElementById('viewProfileBtn').onclick = () => {
+            this.closeAllModals();
+            window.location.href = 'profile.html';
         };
 
         ['loginUser', 'loginPass'].forEach(id => {
