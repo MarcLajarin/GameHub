@@ -25,5 +25,17 @@ CREATE TABLE IF NOT EXISTS historial (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Table for Friends
+CREATE TABLE IF NOT EXISTS amigos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    amigo_id INT NOT NULL,
+    estado ENUM('pendiente', 'aceptado') DEFAULT 'pendiente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (amigo_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_friendship (usuario_id, amigo_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Optional: Initial Admin User (password is 'admin123' for demo - in production use hashes)
 -- INSERT INTO usuarios (nombre, apellidos, email, usuario, password) VALUES ('Admin', 'System', 'admin@gamehub.local', 'admin', 'admin123');

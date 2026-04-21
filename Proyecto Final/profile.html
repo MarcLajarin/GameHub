@@ -501,6 +501,362 @@
             .identity-username { font-size: 1.4rem; }
             .identity-avatar { width: 70px; height: 70px; }
         }
+
+        /* ============================================================
+           BOTÓN BUSCAR AMIGOS Y PANEL DESPLEGABLE
+        ============================================================ */
+
+        .search-friends-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 20px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.12), rgba(0, 243, 255, 0.04));
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 14px;
+            color: var(--accent-cyan);
+            font-family: var(--font-ui);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-friends-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .search-friends-btn:hover {
+            border-color: rgba(0, 243, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .search-friends-btn:hover::before {
+            opacity: 1;
+        }
+
+        .search-friends-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-friends-btn svg {
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .search-friends-btn span {
+            z-index: 1;
+        }
+
+        /* Panel desplegable de búsqueda */
+        .friend-search-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .friend-search-panel.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .friend-search-inner {
+            background: rgba(15, 15, 30, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 8px;
+        }
+
+        .friend-search-title {
+            font-family: var(--font-display);
+            color: var(--accent-cyan);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+
+        .friend-search-input-wrap {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .friend-search-input-wrap .search-icon-mini {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+            font-size: 0.85rem;
+        }
+
+        .friend-search-input {
+            width: 100%;
+            padding: 11px 16px 11px 38px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .friend-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .friend-search-input:focus {
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Resultados de búsqueda */
+        .friend-search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .friend-search-results::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .friend-search-results::-webkit-scrollbar-thumb {
+            background: rgba(0, 243, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .friend-result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .friend-result-item:hover {
+            background: rgba(0, 243, 255, 0.06);
+            border-color: rgba(0, 243, 255, 0.2);
+        }
+
+        .friend-result-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .friend-result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .friend-result-name {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-result-pts {
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+        }
+
+        .friend-add-btn {
+            padding: 6px 14px;
+            background: var(--accent-cyan);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-family: var(--font-ui);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .friend-add-btn:hover {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .friend-add-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            cursor: default;
+            box-shadow: none;
+            filter: none;
+        }
+
+        .friend-add-btn.sent {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+        }
+
+        /* Estado vacío y de carga */
+        .friend-search-empty {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 18px 10px;
+            font-style: italic;
+        }
+
+        .friend-search-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 18px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 243, 255, 0.2);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin-loader 0.8s linear infinite;
+        }
+
+        @keyframes spin-loader {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notificación toast */
+        .friend-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(15, 15, 30, 0.95);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            border-radius: 12px;
+            padding: 14px 22px;
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: 0.85rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.15);
+            z-index: 10000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .friend-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .friend-toast.error {
+            border-color: rgba(255, 82, 82, 0.5);
+        }
+
+        /* Items de amigos en la lista de Friends */
+        .friend-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .friend-list-item:hover {
+            background: rgba(0, 243, 255, 0.04);
+            border-color: rgba(0, 243, 255, 0.15);
+        }
+
+        .friend-list-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .friend-list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .friend-list-name {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .friend-list-status {
+            font-size: 0.72rem;
+        }
+
+        .friend-list-status.accepted {
+            color: #00e676;
+        }
+
+        .friend-list-status.pending {
+            color: #ffab40;
+        }
+
+        .friend-accept-btn {
+            padding: 5px 12px;
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 8px;
+            color: #00e676;
+            font-family: var(--font-ui);
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .friend-accept-btn:hover {
+            background: rgba(0, 230, 118, 0.25);
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
+        }
     </style>
 </head>
 
@@ -601,6 +957,32 @@
                             Leaderboards
                         </button>
                     </nav>
+
+                    <!-- Botón Buscar Amigos -->
+                    <button class="search-friends-btn" id="search-friends-btn" onclick="toggleFriendSearch()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                        <span>Search Friends</span>
+                    </button>
+
+                    <!-- Panel Desplegable de Búsqueda -->
+                    <div class="friend-search-panel" id="friend-search-panel">
+                        <div class="friend-search-inner">
+                            <div class="friend-search-title">Find Players</div>
+                            <div class="friend-search-input-wrap">
+                                <span class="search-icon-mini">🔍</span>
+                                <input type="text" class="friend-search-input" id="friend-search-input" 
+                                       placeholder="Search by username..." autocomplete="off">
+                            </div>
+                            <div class="friend-search-results" id="friend-search-results">
+                                <div class="friend-search-empty">Type at least 2 characters to search...</div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Créditos Totales -->
                     <div class="credits-card">
@@ -843,6 +1225,7 @@
 
                 if (result.success) {
                     populateProfile(result.user);
+                    loadFriendsList();
                 }
             } catch (e) {
                 console.error('Error loading profile:', e);
@@ -899,24 +1282,55 @@
         }
 
         /**
-         * Carga y muestra el leaderboard (top jugadores por puntos).
-         * Como la API no tiene un endpoint de ranking global, simulamos con el usuario actual.
+         * Carga y muestra el leaderboard con el usuario actual y sus amigos aceptados.
+         * Obtiene datos reales desde la API getLeaderboard.
          */
-        function loadLeaderboard(currentUser, currentPts) {
+        async function loadLeaderboard(currentUser, currentPts) {
             const listEl = document.getElementById('leaderboard-list');
 
-            // Construcción de una lista visual representativa
-            const entries = [
-                { rank: 1, name: currentUser, pts: currentPts, isCurrent: true }
-            ];
+            try {
+                const resp = await fetch(
+                    `user_api.php?action=getLeaderboard&usuario=${encodeURIComponent(currentUser)}`
+                );
+                const result = await resp.json();
 
-            listEl.innerHTML = entries.map(e => `
-                <div class="leaderboard-row" style="${e.isCurrent ? 'border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.06);' : ''}">
-                    <div class="lb-rank ${e.rank === 1 ? 'gold' : e.rank === 2 ? 'silver' : e.rank === 3 ? 'bronze' : ''}">${e.rank}</div>
-                    <div class="lb-name">${e.name} ${e.isCurrent ? '<span style="color:var(--accent-cyan); font-size:0.75rem;">(Tú)</span>' : ''}</div>
-                    <div class="lb-pts">${e.pts} pts</div>
-                </div>
-            `).join('');
+                if (result.success && result.leaderboard.length > 0) {
+                    listEl.innerHTML = result.leaderboard.map((e, i) => {
+                        const rank = i + 1;
+                        const isCurrent = e.usuario === currentUser;
+                        const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+                        const rowStyle = isCurrent ? 'border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.06);' : '';
+                        const youLabel = isCurrent ? '<span style="color:var(--accent-cyan); font-size:0.75rem;">(Tú)</span>' : '';
+
+                        return `
+                            <div class="leaderboard-row" style="${rowStyle}">
+                                <div class="lb-rank ${rankClass}">${rank}</div>
+                                <div class="lb-name">${escapeHtml(e.usuario)} ${youLabel}</div>
+                                <div class="lb-pts">${e.puntos || 0} pts</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    // Fallback: mostrar solo el usuario actual
+                    listEl.innerHTML = `
+                        <div class="leaderboard-row" style="border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.06);">
+                            <div class="lb-rank gold">1</div>
+                            <div class="lb-name">${escapeHtml(currentUser)} <span style="color:var(--accent-cyan); font-size:0.75rem;">(Tú)</span></div>
+                            <div class="lb-pts">${currentPts} pts</div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error('Leaderboard error:', e);
+                // Fallback en caso de error de red
+                listEl.innerHTML = `
+                    <div class="leaderboard-row" style="border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.06);">
+                        <div class="lb-rank gold">1</div>
+                        <div class="lb-name">${escapeHtml(currentUser)} <span style="color:var(--accent-cyan); font-size:0.75rem;">(Tú)</span></div>
+                        <div class="lb-pts">${currentPts} pts</div>
+                    </div>
+                `;
+            }
         }
 
         // ---- CONTROLES DEL SIDEBAR TAB ----
@@ -975,6 +1389,250 @@
             // Cargar perfil al arrancar
             loadProfile();
         });
+
+        // ============================================================
+        // LÓGICA DE BÚSQUEDA DE AMIGOS
+        // ============================================================
+
+        let friendSearchTimeout = null;
+
+        /**
+         * Abre/cierra el panel desplegable de búsqueda de amigos.
+         */
+        function toggleFriendSearch() {
+            const panel = document.getElementById('friend-search-panel');
+            panel.classList.toggle('open');
+
+            if (panel.classList.contains('open')) {
+                setTimeout(() => {
+                    document.getElementById('friend-search-input').focus();
+                }, 300);
+            }
+        }
+
+        /**
+         * Busca usuarios por nombre con debounce.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('friend-search-input');
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    clearTimeout(friendSearchTimeout);
+                    const query = e.target.value.trim();
+
+                    if (query.length < 2) {
+                        document.getElementById('friend-search-results').innerHTML =
+                            '<div class="friend-search-empty">Type at least 2 characters to search...</div>';
+                        return;
+                    }
+
+                    // Mostrar loading
+                    document.getElementById('friend-search-results').innerHTML =
+                        '<div class="friend-search-loading"><div class="loading-spinner"></div> Searching...</div>';
+
+                    friendSearchTimeout = setTimeout(() => searchFriends(query), 400);
+                });
+            }
+        });
+
+        /**
+         * Realiza la petición de búsqueda de usuarios a la API.
+         */
+        async function searchFriends(query) {
+            const username = localStorage.getItem(SESSION_KEY);
+            if (!username) return;
+
+            try {
+                const resp = await fetch(
+                    `user_api.php?action=searchUsers&query=${encodeURIComponent(query)}&usuario=${encodeURIComponent(username)}`
+                );
+                const result = await resp.json();
+
+                const container = document.getElementById('friend-search-results');
+
+                if (result.success && result.users.length > 0) {
+                    container.innerHTML = result.users.map(user => `
+                        <div class="friend-result-item">
+                            <div class="friend-result-avatar">👤</div>
+                            <div class="friend-result-info">
+                                <div class="friend-result-name">${escapeHtml(user.usuario)}</div>
+                                <div class="friend-result-pts">${user.puntos || 0} pts</div>
+                            </div>
+                            <button class="friend-add-btn" id="add-btn-${escapeHtml(user.usuario)}" 
+                                    onclick="sendFriendRequest('${escapeHtml(user.usuario)}')">
+                                + Add
+                            </button>
+                        </div>
+                    `).join('');
+                } else if (result.success && result.users.length === 0) {
+                    container.innerHTML = '<div class="friend-search-empty">No players found matching that name.</div>';
+                } else {
+                    container.innerHTML = '<div class="friend-search-empty">Error searching users.</div>';
+                }
+            } catch (e) {
+                console.error('Search error:', e);
+                document.getElementById('friend-search-results').innerHTML =
+                    '<div class="friend-search-empty">Connection error. Try again.</div>';
+            }
+        }
+
+        /**
+         * Envía una solicitud de amistad.
+         */
+        async function sendFriendRequest(friendUsername) {
+            const username = localStorage.getItem(SESSION_KEY);
+            if (!username) return;
+
+            const btn = document.getElementById(`add-btn-${friendUsername}`);
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '...';
+            }
+
+            try {
+                const resp = await fetch('user_api.php?action=addFriend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: username, amigo: friendUsername })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    if (btn) {
+                        btn.textContent = '✓ Sent';
+                        btn.classList.add('sent');
+                    }
+                    showFriendToast(result.message || 'Request sent!', false);
+                    // Recargar lista de amigos
+                    loadFriendsList();
+                } else {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.textContent = '+ Add';
+                    }
+                    showFriendToast(result.message || 'Could not send request.', true);
+                }
+            } catch (e) {
+                console.error('Add friend error:', e);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = '+ Add';
+                }
+                showFriendToast('Connection error.', true);
+            }
+        }
+
+        /**
+         * Carga la lista de amigos y actualiza la sección Friends en el panel Identity.
+         */
+        async function loadFriendsList() {
+            const username = localStorage.getItem(SESSION_KEY);
+            if (!username) return;
+
+            try {
+                const resp = await fetch(
+                    `user_api.php?action=getFriends&usuario=${encodeURIComponent(username)}`
+                );
+                const result = await resp.json();
+
+                const body = document.getElementById('friends-body');
+                if (!body) return;
+
+                if (result.success && result.friends.length > 0) {
+                    body.innerHTML = result.friends.map(f => {
+                        const isAccepted = f.estado === 'aceptado';
+                        const isPendingReceived = f.estado === 'pendiente' && f.direccion === 'recibida';
+                        const isPendingSent = f.estado === 'pendiente' && f.direccion === 'enviada';
+
+                        let statusHtml = '';
+                        let actionHtml = '';
+
+                        if (isAccepted) {
+                            statusHtml = '<span class="friend-list-status accepted">✓ Friend</span>';
+                        } else if (isPendingReceived) {
+                            statusHtml = '<span class="friend-list-status pending">⏳ Pending</span>';
+                            actionHtml = `<button class="friend-accept-btn" onclick="acceptFriendRequest('${escapeHtml(f.usuario)}')">Accept</button>`;
+                        } else if (isPendingSent) {
+                            statusHtml = '<span class="friend-list-status pending">📤 Sent</span>';
+                        }
+
+                        return `
+                            <div class="friend-list-item">
+                                <div class="friend-list-avatar">👤</div>
+                                <div class="friend-list-info">
+                                    <div class="friend-list-name">${escapeHtml(f.usuario)}</div>
+                                    ${statusHtml}
+                                </div>
+                                ${actionHtml}
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    body.innerHTML = '<div class="friends-empty">No friends added yet.</div>';
+                }
+            } catch (e) {
+                console.error('Load friends error:', e);
+            }
+        }
+
+        /**
+         * Acepta una solicitud de amistad pendiente.
+         */
+        async function acceptFriendRequest(friendUsername) {
+            const username = localStorage.getItem(SESSION_KEY);
+            if (!username) return;
+
+            try {
+                const resp = await fetch('user_api.php?action=acceptFriend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: username, amigo: friendUsername })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    showFriendToast('Friend request accepted! 🎉', false);
+                    loadFriendsList();
+                } else {
+                    showFriendToast(result.message || 'Error accepting request.', true);
+                }
+            } catch (e) {
+                showFriendToast('Connection error.', true);
+            }
+        }
+
+        /**
+         * Muestra una notificación toast temporal.
+         */
+        function showFriendToast(message, isError) {
+            // Eliminar toast anterior si existe
+            const existing = document.querySelector('.friend-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `friend-toast ${isError ? 'error' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            // Trigger animation
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        /**
+         * Escapa HTML para prevenir XSS.
+         */
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
     </script>
 
 </body>
