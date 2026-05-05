@@ -37,9 +37,13 @@ class AuthSystem {
 
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            // Note: We don't have a dropdown in the new static design yet, 
-            // but if we add one for the avatar, this is where we'd handle it.
-            // For now, avatar just opens dashboard.
+            const notifDropdown = document.getElementById('notification-dropdown');
+            const notifBtn = document.getElementById('notification-bell');
+            if (notifDropdown && notifDropdown.classList.contains('show')) {
+                if (notifBtn && !notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+                    notifDropdown.classList.remove('show');
+                }
+            }
         });
     }
 
@@ -50,6 +54,8 @@ class AuthSystem {
 
         // User Controls
         const avatarBtn = document.getElementById('nav-user-btn');
+        const notifBtn = document.getElementById('notification-bell');
+        const notifDropdown = document.getElementById('notification-dropdown');
 
         if (guestLoginBtn) {
             guestLoginBtn.onclick = (e) => {
@@ -70,6 +76,40 @@ class AuthSystem {
                 e.preventDefault();
                 this.openDashboard();
             };
+        }
+
+        if (notifBtn && notifDropdown) {
+            notifBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                notifDropdown.classList.toggle('show');
+            });
+
+            notifDropdown.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que se cierre al clickear dentro
+            });
+            
+            // Acciones de las notificaciones de ejemplo
+            const acceptBtns = notifDropdown.querySelectorAll('.action-btn.accept');
+            const declineBtns = notifDropdown.querySelectorAll('.action-btn.decline');
+            
+            acceptBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const item = btn.closest('.notification-item');
+                    item.innerHTML = '<div class="notification-content"><p class="notification-text" style="color:var(--accent-cyan); text-align:center;">¡Solicitud Aceptada!</p></div>';
+                    setTimeout(() => item.remove(), 2000);
+                });
+            });
+            
+            declineBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const item = btn.closest('.notification-item');
+                    item.style.opacity = '0';
+                    setTimeout(() => item.remove(), 300);
+                });
+            });
         }
     }
 
