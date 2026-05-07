@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- =========================================================================================
+     SECCIÓN HEAD
+     Contiene metadatos, título y enlaces a las hojas de estilo.
+========================================================================================== -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Gallery | Premium Arcade</title>
+
+    <!-- Google Fonts: Orbitron, Inter, Jomhuria, Jost -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&family=Jomhuria&family=Jost:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css?v=2.3">
+</head>
+
+<body>
+
+    <!-- =====================================================================================
+         DECORACIÓN DE FONDO
+         Elementos fijos de fondo o capas superpuestas.
+    ====================================================================================== -->
+    <div class="bg-decoration"></div>
+
+    <!-- =====================================================================================
+         CONTENEDOR GLOBAL (PAGE WRAPPER)
+         Contenedor principal para la estructura de la página (Cabecera, Contenido, Pie).
+    ====================================================================================== -->
+    <div class="page-wrapper">
+
+        <!-- *********************************************************************************
+             SECCIÓN DE CABECERA (HEADER)
+             Logo, Barra de Búsqueda, Navegación y Acciones de Usuario.
+        ********************************************************************************** -->
+        <header class="main-header">
+
+            <!-- Lado Izquierdo: Logo y Búsqueda -->
+            <div class="header-left">
+                <!-- Identidad de Marca / Logo -->
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <span class="logo-g">G</span>
+                    </div>
+                    <span class="logo-text">GAMEHUB</span>
+                </div>
+
+                <!-- Barra de Búsqueda -->
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Discover any World, challenges ...">
+                </div>
+            </div>
+
+            <!-- Centro: Enlaces de Navegación -->
+            <nav class="main-nav">
+                <a href="#" class="nav-link active">Start page</a>
+                <a href="#" class="nav-link">Games</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
+
+            <!-- Lado Derecho: Controles de Usuario (Notificaciones, Login/Registro, Perfil) -->
+            <div class="user-actions">
+                <div class="notification-wrapper">
+                    <button class="icon-btn notification-btn" id="notification-bell">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown de Notificaciones -->
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Notificaciones</h4>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon">🎮</div>
+                                <div class="notification-content">
+                                    <p class="notification-text">¡Completaste <strong>BlackJack</strong> con éxito!</p>
+                                    <span class="notification-time">Hace 2 min</span>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">👤</div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>PlayerOne</strong> te ha enviado una solicitud de amistad.</p>
+                                    <span class="notification-time">Hace 15 min</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="action-btn accept" title="Aceptar">✓</button>
+                                    <button class="action-btn decline" title="Rechazar">✕</button>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">🏆</div>
+                                <div class="notification-content">
+                                    <p class="notification-text">Has obtenido <strong>50 pts</strong> de experiencia.</p>
+                                    <span class="notification-time">Hace 2 horas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles de Invitado (Visible cuando NO está logueado) -->
+                <div id="guest-controls" style="display: flex; gap: 15px;">
+                    <button id="header-login-btn" class="auth-btn">Login</button>
+                    <button id="header-reg-btn" class="auth-btn secondary">Register</button>
+                </div>
+
+                <!-- Controles de Usuario Logueado (Visible cuando SÍ está logueado) -->
+                <div id="logged-in-controls" style="display: none; align-items: center; gap: 15px;">
+                    <div class="points-badge" id="static-points-display">0 pts</div>
+                    <button class="user-logo-btn" id="nav-user-btn">👤</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- *********************************************************************************
+             ÁREA DE CONTENIDO PRINCIPAL (MAIN)
+             Contenido primario de la página, incluyendo la Galería de Juegos.
+        ********************************************************************************** -->
+        <main class="content-area">
+
+            <!-- Contenedor del Slider de la Galería -->
+            <div class="gallery-container">
+
+                <!-- Botón Diapositiva Anterior -->
+                <button class="nav-arrow prev-arrow" id="prevBtn">❮</button>
+
+                <!-- Ventana/Visor para las Diapositivas -->
+
+                <div class="gallery-window">
+                    <div class="gallery-track" id="gallery-track">
+
+                        <!-- ==========================
+                             DIAPOSITIVA 1
+                        =========================== -->
+                        <div class="gallery-slide">
+                            <div class="gallery-grid">
+
+                                <!-- Juego: Blackjack -->
+                                <a href="games/blackjack/index.html" class="game-card blackjack-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Blackjack.png" alt="Blackjack" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">BlackJack</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: Solitario -->
+                                <a href="games/solitaire/index.html" class="game-card solitaire-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/solitario.png" alt="Solitario" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Solitario</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: Clicker -->
+                                <a href="games/clicker/index.html?v=1.1" class="game-card clicker-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Clicker.png" alt="Clicker" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Clicker</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: Neon Aim (En Desarrollo) -->
+                                <a href="games/aimlab/index.html" class="game-card aimlab-slot">
+                                    <div class="game-badge dev">In Development</div>
+                                    <div class="card-visuals">
+                                        <img src="img/Aim.png" alt="Neon Aim" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Neon Aim</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: Memory -->
+                                <a href="games/memory/index.html" class="game-card memory-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/memori.png" alt="Memory" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Memory</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: MecanoLAB -->
+                                <a href="games/mecanolab/index.html" class="game-card mecanolab-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/mecanografia.png" alt="Mecanolab" class="game-img">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Mecanolab</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- ==========================
+                             DIAPOSITIVA 2
+                        =========================== -->
+                        <div class="gallery-slide">
+                            <div class="gallery-grid">
+
+                                <!-- Juego: Neon Impostor -->
+                                <a href="games/impostor/index.html" class="game-card impostor-slot">
+                                    <div class="game-badge ready">Ready to use</div>
+                                    <div class="card-visuals">
+                                        <img src="img/logotipo.png" alt="Impostor" class="game-img"
+                                            style="object-fit: contain; padding: 20px;">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Neon Impostor</div>
+                                    </div>
+                                </a>
+
+                                <!-- Juego: Penalty Shootout (En Desarrollo) -->
+                                <a href="games/penalty/index.html" class="game-card penalty-slot">
+                                    <div class="game-badge dev">In Development</div>
+                                    <div class="card-visuals">
+                                        <img src="img/logotipo.png" alt="Penalty" class="game-img"
+                                            style="object-fit: contain; padding: 20px;">
+                                    </div>
+                                    <div class="game-info">
+                                        <div class="game-title">Penalty Shootout</div>
+                                    </div>
+                                </a>
+
+                                <!-- Marcadores de posición (Slots vacíos para rellenar la rejilla) -->
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                                <a href="#" class="game-card placeholder-slot"
+                                    style="opacity: 0; pointer-events: none;"></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Botón Siguiente Diapositiva -->
+                <button class="nav-arrow next-arrow" id="nextBtn">❯</button>
+            </div>
+
+            <!-- Puntos de Navegación (Dots) -->
+            <div class="carousel-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+
+        </main>
+
+        <!-- *********************************************************************************
+             SECCIÓN DE PIE DE PÁGINA (FOOTER)
+             Enlaces, Copyright y Redes Sociales.
+        ********************************************************************************** -->
+        <footer class="main-footer">
+
+            <!-- Izquierda: Logo Pequeño -->
+            <div class="footer-left">
+                <div class="logo-icon small">
+                    <span class="logo-g">G</span>
+                </div>
+            </div>
+
+            <!-- Centro: Enlaces -->
+            <div class="footer-links">
+                <a href="#">Start page</a>
+                <a href="#">Games</a>
+                <a href="#">About</a>
+            </div>
+
+            <!-- Centro: Partners / Socios -->
+            <div class="footer-partners">
+                <!-- Icono: Seguridad/Escudo -->
+                <div class="partner-item" title="Secure Gaming">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <!-- Icono: Tecnología/Chip -->
+                <div class="partner-item" title="Powered by Tech">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                        <line x1="20" y1="9" x2="23" y2="9"></line>
+                        <line x1="20" y1="14" x2="23" y2="14"></line>
+                        <line x1="1" y1="9" x2="4" y2="9"></line>
+                        <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg>
+                </div>
+                <!-- Icono: Global/Mundo -->
+                <div class="partner-item" title="Global Reach">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Información de Copyright -->
+            <div class="footer-copyright">
+                © 2026 GAMEHUB // PROTOCOL_V.2.0.4 // ALL_RIGHTS_RESERVED
+            </div>
+
+            <!-- Derecha: Redes Sociales -->
+            <div class="footer-social">
+                <!-- TikTok Style (Music Note) -->
+                <a href="#" class="social-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </a>
+                <!-- X (Twitter) Style -->
+                <a href="#" class="social-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                        <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                    </svg>
+                </a>
+                <!-- Instagram Style -->
+                <a href="#" class="social-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- =====================================================================================
+         SCRIPTS
+         Scripts cargados al final para no bloquear el renderizado.
+    ====================================================================================== -->
+    <script src="auth.js?v=2.2" defer></script>
+    <script src="gallery.js?v=2.0" defer></script>
+</body>
+
+</html>
