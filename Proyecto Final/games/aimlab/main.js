@@ -27,16 +27,10 @@ function handleTargetHit(targetId) {
     logic.handleHit(targetId);
 }
 
-let selectedDifficulty = localStorage.getItem('arcadeDifficulty') || 'medium';
-
 // Initial Setup
 ui.init({
     onStartGame: startGame,
-    onRestartGame: startGame,
-    onSelectDifficulty: (diff) => {
-        selectedDifficulty = diff;
-        localStorage.setItem('arcadeDifficulty', diff);
-    }
+    onRestartGame: startGame
 });
 
 // Show initial state

@@ -11,7 +11,7 @@ export class MemoryGame {
     }
 
     init() {
-        const difficulty = localStorage.getItem('arcadeDifficulty') || 'standard';
+        const difficulty = 'medium';
         let rows = 4, cols = 4; // Default 4x4 (standard) for redundancy, though we want 8x8 as 'normal' according to prompt or standard?
         // Prompt said: 
         // Easy: 6x6

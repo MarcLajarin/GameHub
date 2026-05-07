@@ -60,7 +60,7 @@ export class GameLogic {
         if (!this.isPlaying) return;
 
         // Base speed modifiers
-        const difficulty = localStorage.getItem('arcadeDifficulty') || 'standard';
+        const difficulty = 'medium';
         let baseDelay = 1000;
         let minDelay = 400;
         let speedMultiplier = 10;
