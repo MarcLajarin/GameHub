@@ -1,9 +1,9 @@
 <?php
 // Database configuration - ACTUALIZADO PARA RAILWAY
-$host = 'mysql.railway.internal'; 
-$db   = 'railway';
+$host = 'localhost'; 
+$db   = 'gamehub_db';
 $user = 'root';
-$pass = 'bLetHVRbohhpLXOLluOKrSPEmPjbRzmG'; 
+$pass = ''; 
 $port = '3306'; 
 $charset = 'utf8mb4';
 

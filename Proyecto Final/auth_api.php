@@ -5,7 +5,7 @@ require_once 'db_config.php';
 $action = $_GET['action'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = JSON_decode(file_get_contents('php://input'), true);
+    $data = json_decode(file_get_contents('php://input'), true);
 
     if ($action === 'register') {
         registerUser($pdo, $data);
