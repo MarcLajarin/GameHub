@@ -49,7 +49,9 @@ export class PenaltyGame {
 
         if (this.round > this.maxRounds) {
             this.gameOver = true;
-            if (this.playerScore > this.cpuScore && window.ArcadeAuth) window.ArcadeAuth.addPoints(7);
+            if (this.playerScore > this.cpuScore && window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(7);
+            }
         }
 
         return {

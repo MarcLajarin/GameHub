@@ -69,7 +69,9 @@ export class BlackjackGame {
         if (playerScore === 21) {
             this.gameOver = true;
             this.message = 'Blackjack! You win!';
-            if (window.ArcadeAuth) window.ArcadeAuth.addPoints(3);
+            if (window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(3);
+            }
         }
     }
 
@@ -79,10 +81,14 @@ export class BlackjackGame {
 
         if (dealerScore > 21) {
             this.message = 'Dealer Busts! You win!';
-            if (window.ArcadeAuth) window.ArcadeAuth.addPoints(3);
+            if (window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(3);
+            }
         } else if (playerScore > dealerScore) {
             this.message = 'You Win!';
-            if (window.ArcadeAuth) window.ArcadeAuth.addPoints(3);
+            if (window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(3);
+            }
         } else if (playerScore < dealerScore) {
             this.message = 'Dealer Wins!';
         } else {

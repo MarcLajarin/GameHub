@@ -107,8 +107,20 @@ export class MemoryUI {
     }
 
     showEndGame() {
-        this.endScreen.style.display = 'flex';
-        document.getElementById('final-moves').textContent = this.game.moves;
-        document.getElementById('final-time').textContent = this.formatTime(this.game.time);
+        const moves = this.game.moves;
+        const time = this.formatTime(this.game.time);
+        const message = `Completed in ${moves} moves and ${time}!`;
+
+        if (window.ArcadeAuth) {
+            window.ArcadeAuth.showGameOverModal({
+                title: 'MEMORY CLEAR!',
+                message: message,
+                onPlayAgain: () => this.initGame()
+            });
+        } else {
+            this.endScreen.style.display = 'flex';
+            document.getElementById('final-moves').textContent = moves;
+            document.getElementById('final-time').textContent = time;
+        }
     }
 }

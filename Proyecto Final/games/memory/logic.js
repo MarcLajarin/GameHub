@@ -122,7 +122,9 @@ export class MemoryGame {
             if (this.matchedPairs === this.cards.length / 2) {
                 this.gameOver = true;
                 this.stopTimer();
-                if (window.ArcadeAuth) window.ArcadeAuth.addPoints(9);
+                if (window.ArcadeAuth) {
+                    window.ArcadeAuth.addPoints(9);
+                }
             }
         } else {
             // No match, wait then flip back

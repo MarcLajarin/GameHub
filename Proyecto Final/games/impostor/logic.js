@@ -118,17 +118,23 @@ export class ImpostorGame {
 
         if (activeImpostors === 0) {
             this.gameState = 'won_crew';
-            if (this.myRole === 'crewmate' && window.ArcadeAuth) window.ArcadeAuth.addPoints(7);
+            if (this.myRole === 'crewmate' && window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(7);
+            }
         } else if (activeImpostors >= livingCrew) {
             this.gameState = 'won_impostor';
-            if (this.myRole === 'impostor' && window.ArcadeAuth) window.ArcadeAuth.addPoints(7);
+            if (this.myRole === 'impostor' && window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(7);
+            }
         }
 
         // Tasks Win
         const tasksDone = this.tasks.filter(t => t.completed).length;
         if (tasksDone === this.tasks.length) {
             this.gameState = 'won_crew';
-            if (this.myRole === 'crewmate' && window.ArcadeAuth) window.ArcadeAuth.addPoints(7);
+            if (this.myRole === 'crewmate' && window.ArcadeAuth) {
+                window.ArcadeAuth.addPoints(7);
+            }
         }
     }
 

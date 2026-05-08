@@ -1560,3 +1560,22 @@ body {
     background: var(--accent-cyan);
     border-radius: 10px;
 }
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff0055;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-dark);
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+}

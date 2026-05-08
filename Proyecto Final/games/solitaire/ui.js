@@ -140,6 +140,20 @@ export class SolitaireUI {
                 el.appendChild(cardEl);
             });
         });
+
+        // Check for Win
+        if (this.game.checkWin()) {
+            if (window.ArcadeAuth) {
+                window.ArcadeAuth.showGameOverModal({
+                    title: 'SOLITAIRE CLEAR!',
+                    message: 'Congratulations! You have organized the entire deck.',
+                    onPlayAgain: () => {
+                        this.game.resetGame();
+                        this.render();
+                    }
+                });
+            }
+        }
     }
 
     createCard(card) {

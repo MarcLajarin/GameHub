@@ -62,10 +62,13 @@ export class ImpostorUI {
         this.game.update();
 
         const state = this.game.getState();
-        if (state.gameState.startsWith('won') || state.gameState.startsWith('lost')) {
+        if ((state.gameState.startsWith('won') || state.gameState.startsWith('lost')) && !this.modalShown) {
+            this.modalShown = true;
             this.showEndGame(state);
             this.render(); // One last render
             return; // Stop loop
+        } else if (state.gameState === 'playing') {
+            this.modalShown = false;
         }
 
         // Render
@@ -179,28 +182,30 @@ export class ImpostorUI {
     }
 
     showEndGame(state) {
-        this.endScreen.style.display = 'flex';
-
-        let msg = "";
-        let color = "";
+        let title = "DEFEAT";
+        let message = "";
+        let isVictory = false;
 
         if (state.gameState === 'won_crew') {
-            msg = "CREWMATES WIN";
-            color = "#00f3ff";
+            message = "CREWMATES WIN";
+            if (this.game.myRole === 'crewmate') isVictory = true;
         } else if (state.gameState === 'won_impostor') {
-            msg = "IMPOSTORS WIN";
-            color = "#ff0055";
+            message = "IMPOSTORS WIN";
+            if (this.game.myRole === 'impostor') isVictory = true;
         }
 
-        if (state.gameState === 'won_crew' && this.game.myRole === 'crewmate') {
-            msg += " (VICTORY)";
-        } else if (state.gameState === 'won_impostor' && this.game.myRole === 'impostor') {
-            msg += " (VICTORY)";
+        if (isVictory) title = "VICTORY";
+
+        if (window.ArcadeAuth) {
+            window.ArcadeAuth.showGameOverModal({
+                title: title,
+                message: message,
+                onPlayAgain: () => this.restart()
+            });
         } else {
-            msg += " (DEFEAT)";
+            this.endScreen.style.display = 'flex';
+            this.endMessage.textContent = `${message} (${title})`;
+            this.endMessage.style.color = isVictory ? "#00f3ff" : "#ff0055";
         }
-
-        this.endMessage.textContent = msg;
-        this.endMessage.style.color = color;
     }
 }

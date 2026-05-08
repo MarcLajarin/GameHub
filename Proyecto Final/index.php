@@ -72,6 +72,7 @@
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                         </svg>
+                        <span class="notif-badge" id="notif-badge" style="display: none;">0</span>
                     </button>
                     <!-- Dropdown de Notificaciones -->
                     <div class="notification-dropdown" id="notification-dropdown">
@@ -79,31 +80,7 @@
                             <h4>Notificaciones</h4>
                         </div>
                         <div class="notification-list">
-                            <div class="notification-item unread">
-                                <div class="notification-icon">🎮</div>
-                                <div class="notification-content">
-                                    <p class="notification-text">¡Completaste <strong>BlackJack</strong> con éxito!</p>
-                                    <span class="notification-time">Hace 2 min</span>
-                                </div>
-                            </div>
-                            <div class="notification-item unread">
-                                <div class="notification-icon">👤</div>
-                                <div class="notification-content">
-                                    <p class="notification-text"><strong>PlayerOne</strong> te ha enviado una solicitud de amistad.</p>
-                                    <span class="notification-time">Hace 15 min</span>
-                                </div>
-                                <div class="notification-actions">
-                                    <button class="action-btn accept" title="Aceptar">✓</button>
-                                    <button class="action-btn decline" title="Rechazar">✕</button>
-                                </div>
-                            </div>
-                            <div class="notification-item">
-                                <div class="notification-icon">🏆</div>
-                                <div class="notification-content">
-                                    <p class="notification-text">Has obtenido <strong>50 pts</strong> de experiencia.</p>
-                                    <span class="notification-time">Hace 2 horas</span>
-                                </div>
-                            </div>
+                            <!-- Inyectado dinámicamente por auth.js -->
                         </div>
                     </div>
                 </div>

@@ -28,6 +28,9 @@ export class ClickerGame {
             this.bits -= upgrade.cost;
             upgrade.count++;
             this.autoClickPower += upgrade.auto;
+            if (upgrade.count === 1 && window.ArcadeAuth) {
+                window.ArcadeAuth.addNotification(`¡Nuevo activo! Has desbloqueado: ${upgrade.name}`);
+            }
             upgrade.cost = Math.ceil(upgrade.cost * 1.15);
             return true;
         }

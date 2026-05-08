@@ -58,11 +58,27 @@ export class BlackjackUI {
         this.dealerScoreEl.textContent = state.dealerScore;
 
         // Buttons
-        if (state.gameOver) {
+        if (state.gameOver && !this.modalShown) {
+            this.modalShown = true;
             this.btnHit.disabled = true;
             this.btnStand.disabled = true;
-            this.btnNewGame.style.display = 'block';
-        } else {
+            
+            // Show Whisper Game Over Modal
+            if (window.ArcadeAuth) {
+                window.ArcadeAuth.showGameOverModal({
+                    title: state.message.includes('Win') || state.message.includes('Blackjack') ? 'VICTORY' : 'DEFEAT',
+                    message: state.message,
+                    onPlayAgain: () => {
+                        this.modalShown = false;
+                        const newState = this.game.startGame();
+                        this.render(newState);
+                    }
+                });
+            } else {
+                this.btnNewGame.style.display = 'block';
+            }
+        } else if (!state.gameOver) {
+            this.modalShown = false;
             this.btnHit.disabled = false;
             this.btnStand.disabled = false;
             this.btnNewGame.style.display = 'none';

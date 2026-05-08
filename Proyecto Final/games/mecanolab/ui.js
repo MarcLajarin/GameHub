@@ -58,18 +58,28 @@ export class GameUI {
     }
 
     showGameOver(isWin) {
-        this.endScreen.style.display = 'flex';
-        const title = document.getElementById('end-title');
-        const msg = document.getElementById('end-message');
-
-        if (isWin) {
-            title.textContent = 'A+ EXCELLENT WORK';
-            title.style.color = '#4ade80';
-            msg.textContent = 'You passed the typing test!';
+        if (window.ArcadeAuth) {
+            window.ArcadeAuth.showGameOverModal({
+                title: isWin ? 'MISSION PASSED' : 'MISSION FAILED',
+                message: isWin ? 'You passed the typing test with flying colors!' : 'Your accuracy wasn\'t enough this time.',
+                onPlayAgain: () => {
+                    document.dispatchEvent(new Event('gameStart'));
+                }
+            });
         } else {
-            title.textContent = 'F - SEE ME AFTER CLASS';
-            title.style.color = '#ef4444';
-            msg.textContent = 'Don\'t give up, try again.';
+            this.endScreen.style.display = 'flex';
+            const title = document.getElementById('end-title');
+            const msg = document.getElementById('end-message');
+
+            if (isWin) {
+                title.textContent = 'A+ EXCELLENT WORK';
+                title.style.color = '#4ade80';
+                msg.textContent = 'You passed the typing test!';
+            } else {
+                title.textContent = 'F - SEE ME AFTER CLASS';
+                title.style.color = '#ef4444';
+                msg.textContent = 'Don\'t give up, try again.';
+            }
         }
     }
 }

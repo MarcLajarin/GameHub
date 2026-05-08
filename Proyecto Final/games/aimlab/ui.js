@@ -37,9 +37,19 @@ export class GameUI {
     }
 
     showGameOver(score) {
-        this.endScreen.style.display = 'flex';
-        this.finalScoreDisplay.textContent = score;
-        this.gameStatus.textContent = 'MISSION ENDED';
+        if (window.ArcadeAuth) {
+            window.ArcadeAuth.showGameOverModal({
+                title: 'TIME OVER',
+                message: `You scored ${score} points!`,
+                onPlayAgain: () => {
+                    this.restartBtn.click(); // Uses the callback bound in main.js
+                }
+            });
+        } else {
+            this.endScreen.style.display = 'flex';
+            this.finalScoreDisplay.textContent = score;
+            this.gameStatus.textContent = 'MISSION ENDED';
+        }
     }
 
     spawnTarget(targetData, onHitCallback) {

@@ -145,19 +145,30 @@ export class PenaltyUI {
     }
 
     showEndGame(state) {
-        const endScreen = document.querySelector('.end-screen');
-        const endTitle = endScreen.querySelector('h2');
-        endScreen.style.display = 'flex';
+        let title = "DRAW 🤝";
+        let message = `Final Score: ${state.playerScore} - ${state.cpuScore}`;
 
         if (state.playerScore > state.cpuScore) {
-            endTitle.textContent = "YOU WIN! 🏆";
-            endTitle.style.color = "#4caf50";
+            title = "VICTORY 🏆";
         } else if (state.playerScore < state.cpuScore) {
-            endTitle.textContent = "YOU LOSE ❌";
-            endTitle.style.color = "#f44336";
+            title = "DEFEAT ❌";
+        }
+
+        if (window.ArcadeAuth) {
+            window.ArcadeAuth.showGameOverModal({
+                title: title,
+                message: message,
+                onPlayAgain: () => {
+                    this.game.reset();
+                    this.resetVisuals();
+                    this.updateDisplay();
+                }
+            });
         } else {
-            endTitle.textContent = "DRAW 🤝";
-            endTitle.style.color = "#ffeb3b";
+            const endScreen = document.querySelector('.end-screen');
+            const endTitle = endScreen.querySelector('h2');
+            endScreen.style.display = 'flex';
+            endTitle.textContent = title;
         }
     }
 }

@@ -173,7 +173,9 @@ export class SolitaireGame {
 
     checkWin() {
         const isWin = Object.values(this.foundations).every(p => p.length === 13);
-        if (isWin && window.ArcadeAuth) window.ArcadeAuth.addPoints(35);
+        if (isWin && window.ArcadeAuth) {
+            window.ArcadeAuth.addPoints(35);
+        }
         return isWin;
     }
 }
