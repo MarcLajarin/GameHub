@@ -314,7 +314,7 @@
             <!-- Derecha: Redes Sociales -->
             <div class="footer-social">
                 <!-- TikTok Style (Music Note) -->
-                <a href="#" class="social-icon">
+                <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener noreferrer" class="social-icon" title="Spotify Login">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 18V5l12-2v13"></path>
@@ -323,7 +323,7 @@
                     </svg>
                 </a>
                 <!-- X (Twitter) Style -->
-                <a href="#" class="social-icon">
+                <a href="https://twitter.com/i/flow/login" target="_blank" rel="noopener noreferrer" class="social-icon" title="X (Twitter) Login">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
@@ -331,7 +331,7 @@
                     </svg>
                 </a>
                 <!-- Instagram Style -->
-                <a href="#" class="social-icon">
+                <a href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram Login">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>

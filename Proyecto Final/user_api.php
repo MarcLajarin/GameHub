@@ -11,6 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         addPoints($pdo, $data);
     } elseif ($action === 'addHistory') {
         addHistory($pdo, $data);
+    } elseif ($action === 'addNotification') {
+        addNotification($pdo, $data);
+    } elseif ($action === 'markNotificationsRead') {
+        markNotificationsRead($pdo, $data);
     } elseif ($action === 'addFriend') {
         addFriend($pdo, $data);
     } elseif ($action === 'acceptFriend') {
@@ -29,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         getFriends($pdo, $_GET['usuario']);
     } elseif ($action === 'getLeaderboard') {
         getLeaderboard($pdo, $_GET['usuario']);
+    } elseif ($action === 'getNotifications') {
+        getNotifications($pdo, $_GET['usuario']);
     }
 }
 
@@ -241,6 +247,63 @@ function getLeaderboard($pdo, $username) {
         echo JSON_encode(['success' => true, 'leaderboard' => $leaderboard]);
     } catch (Exception $e) {
         echo JSON_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+function addNotification($pdo, $data) {
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE usuario = ?");
+        $stmt->execute([$data['usuario']]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            $stmt = $pdo->prepare("INSERT INTO notificaciones (usuario_id, texto, tipo) VALUES (?, ?, ?)");
+            $stmt->execute([$user['id'], $data['texto'], $data['tipo'] ?? 'game']);
+            echo JSON_encode(['success' => true]);
+        } else {
+            echo JSON_encode(['success' => false, 'message' => 'User not found']);
+        }
+    } catch (Exception $e) {
+        echo JSON_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+
+function getNotifications($pdo, $username) {
+    try {
+        $stmt = $pdo->prepare("SELECT n.id, n.texto as text, n.tipo as type, n.leida as unread, n.created_at as time 
+                               FROM notificaciones n 
+                               JOIN usuarios u ON n.usuario_id = u.id 
+                               WHERE u.usuario = ? 
+                               ORDER BY n.created_at DESC LIMIT 10");
+        $stmt->execute([$username]);
+        $notifs = $stmt->fetchAll();
+        
+        // Convert unread from 0/1 to boolean (inverted logic in frontend: unread means 1, but leida means 0 is unread)
+        // Wait, 'leida' means 'read'. So leida=0 is unread=true.
+        foreach ($notifs as &$n) {
+            $n['unread'] = $n['unread'] == 0;
+            // Format time a bit
+            $n['time'] = 'Recientemente';
+        }
+
+        echo JSON_encode(['success' => true, 'notifications' => $notifs]);
+    } catch (Exception $e) {
+        echo JSON_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+
+function markNotificationsRead($pdo, $data) {
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE usuario = ?");
+        $stmt->execute([$data['usuario']]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            $stmt = $pdo->prepare("UPDATE notificaciones SET leida = 1 WHERE usuario_id = ? AND leida = 0");
+            $stmt->execute([$user['id']]);
+            echo JSON_encode(['success' => true]);
+        }
+    } catch (Exception $e) {
+        echo JSON_encode(['success' => false]);
     }
 }
 ?>

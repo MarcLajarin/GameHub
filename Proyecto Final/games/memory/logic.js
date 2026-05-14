@@ -123,7 +123,7 @@ export class MemoryGame {
                 this.gameOver = true;
                 this.stopTimer();
                 if (window.ArcadeAuth) {
-                    window.ArcadeAuth.addPoints(9);
+                    // Points handled by showGameOverModal
                 }
             }
         } else {

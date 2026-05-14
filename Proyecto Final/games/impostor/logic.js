@@ -119,12 +119,12 @@ export class ImpostorGame {
         if (activeImpostors === 0) {
             this.gameState = 'won_crew';
             if (this.myRole === 'crewmate' && window.ArcadeAuth) {
-                window.ArcadeAuth.addPoints(7);
+                // Points handled by showGameOverModal
             }
         } else if (activeImpostors >= livingCrew) {
             this.gameState = 'won_impostor';
             if (this.myRole === 'impostor' && window.ArcadeAuth) {
-                window.ArcadeAuth.addPoints(7);
+                // Points handled by showGameOverModal
             }
         }
 
@@ -133,7 +133,7 @@ export class ImpostorGame {
         if (tasksDone === this.tasks.length) {
             this.gameState = 'won_crew';
             if (this.myRole === 'crewmate' && window.ArcadeAuth) {
-                window.ArcadeAuth.addPoints(7);
+                // Points handled by showGameOverModal
             }
         }
     }

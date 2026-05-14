@@ -110,11 +110,23 @@ class AuthSystem {
         }
     }
 
-    markAllAsRead() {
+    async markAllAsRead() {
+        const user = this.getSession();
         const notifs = this.getNotifications();
         notifs.forEach(n => n.unread = false);
         localStorage.setItem(this.notifKey, JSON.stringify(notifs));
-        setTimeout(() => this.renderNotifications(), 500); // Delay to let user see unread state briefly
+        
+        if (user) {
+            try {
+                await fetch(`${this.getApiPath()}?action=markNotificationsRead`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: user })
+                });
+            } catch (e) { console.error("Sync read status failed", e); }
+        }
+        
+        setTimeout(() => this.renderNotifications(), 500); 
     }
 
     injectStyles() {
@@ -380,11 +392,23 @@ class AuthSystem {
     }
 
     showGameOverModal(options = {}) {
-        const { title = 'Game Over', message = '', onPlayAgain = null } = options;
+        const { title = 'Game Over', message = '', onPlayAgain = null, isSuccess } = options;
         
-        // Add notification automatically
-        const gameTitle = document.title.split('|')[0].trim();
-        this.addNotification(`¡Has completado ${gameTitle}! ${message}`);
+        let success = false;
+        if (isSuccess !== undefined) {
+            success = isSuccess;
+        } else {
+            const t = title.toUpperCase();
+            // Automatically determine win state from title if not explicitly passed
+            success = t.includes('VICTOR') || t.includes('CLEAR') || t.includes('PASSED') || t.includes('TIME OVER');
+        }
+
+        if (success) {
+            // Add notification automatically
+            const gameTitle = document.title.split('|')[0].trim();
+            this.addNotification(`¡Has completado ${gameTitle}! +5 pts sumados a tu cuenta`);
+            this.addPoints(5); // Rewards are now centrally managed here
+        }
 
         const overlay = document.createElement('div');
         overlay.className = 'game-over-overlay';
@@ -408,7 +432,14 @@ class AuthSystem {
         };
 
         document.getElementById('gameOverReturn').onclick = () => {
-            window.location.href = '../../index.php';
+            const currentPath = window.location.pathname;
+            const gamesIndex = currentPath.indexOf('/games/');
+            if (gamesIndex !== -1) {
+                const rootPath = currentPath.substring(0, gamesIndex);
+                window.location.href = rootPath + '/';
+            } else {
+                window.location.href = './';
+            }
         };
     }
 
@@ -422,6 +453,18 @@ class AuthSystem {
 
     async checkSession() {
         const user = this.getSession();
+        if (user) {
+            // Fetch fresh points from DB so the badge is always up to date
+            try {
+                const resp = await fetch(`${this.getApiPath()}?action=getProfile&usuario=${user}`);
+                const result = await resp.json();
+                if (result.success) {
+                    localStorage.setItem('arcade_points', result.user.puntos);
+                }
+            } catch (e) {
+                console.error('Failed to fetch profile on init', e);
+            }
+        }
         this.updateUI(user);
     }
 
@@ -439,26 +482,46 @@ class AuthSystem {
 
     async addPoints(amount) {
         const user = this.getSession();
-        if (!user) return;
+        if (!user) {
+            console.warn('addPoints: No user session found, skipping.');
+            return;
+        }
+
+        const apiUrl = `${this.getApiPath()}?action=addPoints`;
+        console.log(`addPoints: Sending ${amount} pts for user "${user}" to ${apiUrl}`);
 
         try {
-            const resp = await fetch(`${this.getApiPath()}?action=addPoints`, {
+            const resp = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: user, amount: amount })
             });
             const result = await resp.json();
+            console.log('addPoints API response:', result);
+
             if (result.success) {
-                // Update UI points locally if possible or just refresh
+                // Fetch updated profile to get new points total
+                const pResp = await fetch(`${this.getApiPath()}?action=getProfile&usuario=${user}`);
+                const pResult = await pResp.json();
+                if (pResult.success) {
+                    localStorage.setItem('arcade_points', pResult.user.puntos);
+                    console.log('addPoints: Points updated to', pResult.user.puntos);
+                }
+                
                 this.updateUI(user);
                 this.showToast(`+${amount} XP Earned!`);
+                this.animatePointsBadge(amount);
+            } else {
+                console.error('addPoints: API returned failure', result);
             }
         } catch (e) {
+            console.error('addPoints: Fetch failed', e);
             this.showToast("⚠️ Points sync failed");
         }
     }
 
-    addNotification(text, type = 'game') {
+    async addNotification(text, type = 'game') {
+        const user = this.getSession();
         const notifs = this.getNotifications();
         const newNotif = {
             id: Date.now(),
@@ -468,7 +531,18 @@ class AuthSystem {
             unread: true
         };
         notifs.unshift(newNotif);
-        localStorage.setItem(this.notifKey, JSON.stringify(notifs.slice(0, 10))); // Keep last 10
+        localStorage.setItem(this.notifKey, JSON.stringify(notifs.slice(0, 10))); 
+        
+        if (user) {
+            try {
+                await fetch(`${this.getApiPath()}?action=addNotification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: user, texto: text, tipo: type })
+                });
+            } catch (e) { console.error("Notification sync failed", e); }
+        }
+
         this.renderNotifications();
         this.showToast(`🔔 ${text}`);
     }
@@ -478,12 +552,27 @@ class AuthSystem {
         return data ? JSON.parse(data) : [];
     }
 
-    renderNotifications() {
+    async renderNotifications() {
         const container = document.querySelector('.notification-list');
         const badge = document.getElementById('notif-badge');
         if (!container) return;
 
-        const notifs = this.getNotifications();
+        const user = this.getSession();
+        let notifs = this.getNotifications();
+
+        // If logged in, we can try to fetch the latest from DB
+        if (user && !this._notifsFetched) {
+            try {
+                const resp = await fetch(`${this.getApiPath()}?action=getNotifications&usuario=${user}`);
+                const result = await resp.json();
+                if (result.success && result.notifications) {
+                    notifs = result.notifications;
+                    localStorage.setItem(this.notifKey, JSON.stringify(notifs));
+                    this._notifsFetched = true; // Avoid infinite loop if we call render again
+                }
+            } catch (e) { console.error("Fetch notifications failed", e); }
+        }
+
         container.innerHTML = '';
 
         if (notifs.length === 0) {
@@ -561,7 +650,7 @@ class AuthSystem {
     }
 
     openModal(type) {
-        const overlay = document.getElementById('authOverlay');
+        const overlay = document.getElementById('auth-overlay');
         const loginM = document.getElementById('modal-login');
         const regM = document.getElementById('modal-register');
         const dashM = document.getElementById('modal-dashboard');
@@ -586,7 +675,7 @@ class AuthSystem {
     }
 
     closeAllModals() {
-        const overlay = document.getElementById('authOverlay');
+        const overlay = document.getElementById('auth-overlay');
         if (overlay) overlay.classList.remove('active');
     }
 
@@ -643,6 +732,7 @@ class AuthSystem {
 
             if (result.success) {
                 localStorage.setItem(this.sessionKey, result.user.usuario);
+                localStorage.setItem('arcade_points', result.user.puntos || 0);
                 this.updateUI(result.user.usuario);
                 this.closeAllModals();
             } else {
@@ -668,7 +758,6 @@ class AuthSystem {
         if (username) {
             guestControls.style.display = 'none';
             loggedInControls.style.display = 'flex';
-            // Points are fetched on login or addPoints, for a full refresh we'd need a getProfile
             if (pointsDisplay && localStorage.getItem('arcade_points')) {
                 pointsDisplay.textContent = `${localStorage.getItem('arcade_points')} pts`;
             }
@@ -677,6 +766,54 @@ class AuthSystem {
             loggedInControls.style.display = 'none';
         }
     }
+
+    animatePointsBadge(amount) {
+        const badge = document.getElementById('static-points-display');
+        if (!badge) return;
+
+        badge.classList.remove('pulse-reward');
+        void badge.offsetWidth; // Trigger reflow
+        badge.classList.add('pulse-reward');
+
+        const floating = document.createElement('div');
+        floating.textContent = `+${amount}`;
+        floating.style.cssText = `
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            color: var(--accent-cyan);
+            font-family: var(--font-display);
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+            text-shadow: 0 0 10px var(--accent-cyan);
+        `;
+        badge.parentElement.style.position = 'relative';
+        badge.parentElement.appendChild(floating);
+        setTimeout(() => floating.remove(), 1000);
+    }
+}
+
+// Add CSS for animations if not present
+if (!document.getElementById('arcade-auth-animations')) {
+    const style = document.createElement('style');
+    style.id = 'arcade-auth-animations';
+    style.textContent = `
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+        .pulse-reward {
+            animation: pulse-reward 0.5s ease-out;
+        }
+        @keyframes pulse-reward {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 20px var(--accent-cyan); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 new AuthSystem();

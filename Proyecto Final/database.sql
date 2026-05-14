@@ -37,5 +37,16 @@ CREATE TABLE IF NOT EXISTS amigos (
     UNIQUE KEY unique_friendship (usuario_id, amigo_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Table for Notifications
+CREATE TABLE IF NOT EXISTS notificaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    texto TEXT NOT NULL,
+    tipo VARCHAR(20) DEFAULT 'game',
+    leida TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Optional: Initial Admin User (password is 'admin123' for demo - in production use hashes)
 -- INSERT INTO usuarios (nombre, apellidos, email, usuario, password) VALUES ('Admin', 'System', 'admin@gamehub.local', 'admin', 'admin123');
