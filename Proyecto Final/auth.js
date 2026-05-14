@@ -447,6 +447,10 @@ class AuthSystem {
         return window.location.pathname.includes('/games/') ? '../../user_api.php' : 'user_api.php';
     }
 
+    getAuthApiPath() {
+        return window.location.pathname.includes('/games/') ? '../../auth_api.php' : 'auth_api.php';
+    }
+
     // --- LOGIC ---
 
     getSession() { return localStorage.getItem(this.sessionKey); }
@@ -617,7 +621,7 @@ class AuthSystem {
 
         try {
             // Fetch history from DB
-            const resp = await fetch(`user_api.php?action=getHistory&usuario=${user}`);
+            const resp = await fetch(`${this.getApiPath()}?action=getHistory&usuario=${user}`);
             const result = await resp.json();
 
             document.getElementById('dashUsername').textContent = user;
@@ -698,7 +702,7 @@ class AuthSystem {
         if (data.password !== data.confirm) { error.textContent = "Passwords mismatch."; return; }
 
         try {
-            const resp = await fetch('auth_api.php?action=register', {
+            const resp = await fetch(`${this.getAuthApiPath()}?action=register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -723,7 +727,7 @@ class AuthSystem {
         const error = document.getElementById('loginError');
 
         try {
-            const resp = await fetch('auth_api.php?action=login', {
+            const resp = await fetch(`${this.getAuthApiPath()}?action=login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: user, password: pass })
