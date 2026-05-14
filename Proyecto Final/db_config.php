@@ -1,10 +1,10 @@
 <?php
-// Database configuration - ACTUALIZADO PARA RAILWAY
-$host = 'localhost'; 
-$db   = 'gamehub_db';
-$user = 'root';
-$pass = ''; 
-$port = '3306'; 
+// Database configuration - Soporte dual (Local WAMP y Producción Railway)
+$host = $_ENV['MYSQLHOST'] ?? $_SERVER['MYSQLHOST'] ?? getenv('MYSQLHOST') ?: 'localhost'; 
+$db   = $_ENV['MYSQLDATABASE'] ?? $_SERVER['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE') ?: 'gamehub_db';
+$user = $_ENV['MYSQLUSER'] ?? $_SERVER['MYSQLUSER'] ?? getenv('MYSQLUSER') ?: 'root';
+$pass = $_ENV['MYSQLPASSWORD'] ?? $_SERVER['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD') ?: ''; 
+$port = $_ENV['MYSQLPORT'] ?? $_SERVER['MYSQLPORT'] ?? getenv('MYSQLPORT') ?: '3306'; 
 $charset = 'utf8mb4';
 
 // El DSN ahora incluye el puerto, esencial para Railway
@@ -18,7 +18,9 @@ $options = [
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-     // En producción es mejor un mensaje genérico, pero para tu presentación esto está bien
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+     // Devolver un error JSON amigable para que los modals de auth no fallen con un error de red
+     header('Content-Type: application/json');
+     echo json_encode(['success' => false, 'message' => 'DB Connection Failed: ' . $e->getMessage()]);
+     exit;
 }
 ?>
