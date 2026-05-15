@@ -14,6 +14,7 @@ class AuthSystem {
     constructor() {
         this.notifKey = 'arcade_notifications';
         this.sessionKey = 'arcade_session';
+        this.apiBaseUrl = this.detectApiBaseUrl();
 
         // Expose Global API for Games
         window.ArcadeAuth = {
@@ -32,6 +33,22 @@ class AuthSystem {
             this.init();
             console.log("🎮 ArcadeAuth System V3.0 Initialized");
         }
+    }
+
+    detectApiBaseUrl() {
+        const authScript = Array.from(document.scripts || []).find((script) =>
+            script.src && /auth\.js(?:\?|$)/i.test(script.src)
+        );
+
+        if (authScript?.src) {
+            return new URL('./', authScript.src).toString();
+        }
+
+        return new URL('./', window.location.href).toString();
+    }
+
+    buildApiUrl(fileName) {
+        return new URL(fileName, this.apiBaseUrl).toString();
     }
 
     init() {
@@ -444,11 +461,29 @@ class AuthSystem {
     }
 
     getApiPath() {
-        return window.location.pathname.includes('/games/') ? '../../user_api.php' : 'user_api.php';
+        return this.buildApiUrl('user_api.php');
     }
 
     getAuthApiPath() {
-        return window.location.pathname.includes('/games/') ? '../../auth_api.php' : 'auth_api.php';
+        return this.buildApiUrl('auth_api.php');
+    }
+
+    async fetchJson(url, options = {}) {
+        const resp = await fetch(url, options);
+        const raw = await resp.text();
+
+        let result;
+        try {
+            result = raw ? JSON.parse(raw) : {};
+        } catch (error) {
+            throw new Error(`Respuesta invalida del servidor (${resp.status})`);
+        }
+
+        if (!resp.ok) {
+            throw new Error(result.message || `Error HTTP ${resp.status}`);
+        }
+
+        return result;
     }
 
     // --- LOGIC ---
@@ -460,8 +495,8 @@ class AuthSystem {
         if (user) {
             // Fetch fresh points from DB so the badge is always up to date
             try {
-                const resp = await fetch(`${this.getApiPath()}?action=getProfile&usuario=${user}`);
-                const result = await resp.json();
+                const respUrl = `${this.getApiPath()}?action=getProfile&usuario=${encodeURIComponent(user)}`;
+                const result = await this.fetchJson(respUrl);
                 if (result.success) {
                     localStorage.setItem('arcade_points', result.user.puntos);
                 }
@@ -710,12 +745,11 @@ class AuthSystem {
         }
 
         try {
-            const resp = await fetch(`${this.getAuthApiPath()}?action=register`, {
+            const result = await this.fetchJson(`${this.getAuthApiPath()}?action=register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            const result = await resp.json();
 
             if (result.success) {
                 localStorage.setItem(this.sessionKey, data.usuario);
@@ -726,7 +760,7 @@ class AuthSystem {
                 error.style.display = 'block';
             }
         } catch (e) {
-            error.textContent = "Network error.";
+            error.textContent = e.message || "Network error.";
             error.style.display = 'block';
         }
     }
@@ -737,12 +771,11 @@ class AuthSystem {
         const error = document.getElementById('loginError');
 
         try {
-            const resp = await fetch(`${this.getAuthApiPath()}?action=login`, {
+            const result = await this.fetchJson(`${this.getAuthApiPath()}?action=login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: user, password: pass })
             });
-            const result = await resp.json();
 
             if (result.success) {
                 localStorage.setItem(this.sessionKey, result.user.usuario);
@@ -754,7 +787,7 @@ class AuthSystem {
                 error.style.display = 'block';
             }
         } catch (e) {
-            error.textContent = "Network error.";
+            error.textContent = e.message || "Network error.";
             error.style.display = 'block';
         }
     }
