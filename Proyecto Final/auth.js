@@ -661,7 +661,10 @@ class AuthSystem {
 
         if (!overlay) return;
 
-        document.querySelectorAll('.auth-error').forEach(e => e.textContent = '');
+        document.querySelectorAll('.auth-error').forEach(e => {
+            e.textContent = '';
+            e.style.display = 'none';
+        });
         document.querySelectorAll('.auth-modal input').forEach(i => i.value = '');
 
         overlay.classList.add('active');
@@ -697,9 +700,14 @@ class AuthSystem {
 
         if (!data.nombre || !data.usuario || !data.password) {
             error.textContent = "Required fields missing.";
+            error.style.display = 'block';
             return;
         }
-        if (data.password !== data.confirm) { error.textContent = "Passwords mismatch."; return; }
+        if (data.password !== data.confirm) { 
+            error.textContent = "Passwords mismatch."; 
+            error.style.display = 'block';
+            return; 
+        }
 
         try {
             const resp = await fetch(`${this.getAuthApiPath()}?action=register`, {
@@ -715,9 +723,11 @@ class AuthSystem {
                 this.closeAllModals();
             } else {
                 error.textContent = result.message;
+                error.style.display = 'block';
             }
         } catch (e) {
             error.textContent = "Network error.";
+            error.style.display = 'block';
         }
     }
 
@@ -741,9 +751,11 @@ class AuthSystem {
                 this.closeAllModals();
             } else {
                 error.textContent = result.message;
+                error.style.display = 'block';
             }
         } catch (e) {
             error.textContent = "Network error.";
+            error.style.display = 'block';
         }
     }
 
