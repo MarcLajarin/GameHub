@@ -1,5 +1,7 @@
 .git
 .gitignore
 README.md
+GUIA_PASO_A_PASO.md
+database.sql
 **/.DS_Store
 **/Thumbs.db
