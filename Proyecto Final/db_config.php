@@ -1,25 +1,22 @@
 <?php
 // db_config.php
 
-// Railway proporciona estas variables automáticamente en su entorno de ejecución.
-// Si no existen (por ejemplo, ejecutándolo en local), usará los valores por defecto (localhost).
-$host     = getenv('MYSQLHOST')     ?: '127.0.0.1';
-$port     = getenv('MYSQLPORT')     ?: '3306';
-$dbname   = getenv('MYSQLDATABASE') ?: 'railway';
-$user     = getenv('MYSQLUSER')     ?: 'root';
-$password = getenv('MYSQLPASSWORD') ?: '';
+// Reemplaza cada valor entre comillas con los datos reales sin asteriscos
+// Los puedes ver haciendo clic en cada variable en la pestaña de MySQL de Railway.
+$host     = 'mysql.railway.internal'; // Revisa si tu MYSQLHOST es este o una URL larga
+$port     = '3306';                   // Tu MYSQLPORT (suele ser 3306)
+$dbname   = 'railway';                // Tu MYSQLDATABASE
+$user     = 'root';                   // Tu MYSQLUSER
+$password = 'TU_CONTRASEÑA_LARGA';    // Tu MYSQLPASSWORD (el código largo de letras y números)
 
 try {
-    // Configuramos el DSN incluyendo explícitamente el Host y el Puerto internos de Railway
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
     
     $pdo = new PDO($dsn, $user, $password);
     
-    // Configuraciones de seguridad y manejo de errores obligatorias
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     
 } catch (PDOException $e) {
-    // Si la conexión falla, nos mostrará el motivo real en pantalla sin colgar el servidor
     die("DB Connection Failed: " . $e->getMessage());
 }
