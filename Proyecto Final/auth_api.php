@@ -1,6 +1,26 @@
 <?php
 header('Content-Type: application/json');
-require_once 'db_config.php';
+
+// Credenciales directas de Railway (obtenidas dinámicamente)
+$host     = getenv('MYSQLHOST')     ?: 'mysql.railway.internal';
+$port     = getenv('MYSQLPORT')     ?: '3306';
+$dbname   = getenv('MYSQLDATABASE') ?: 'railway';
+$user     = getenv('MYSQLUSER')     ?: 'root';
+$password = getenv('MYSQLPASSWORD') ?: '';
+
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+    $pdo = new PDO($dsn, $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Si la base de datos falla, devolvemos un JSON limpio para que no rompa el JS
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error de conexión a la BD: ' . $e->getMessage()
+    ]);
+    exit;
+}
 
 $action = $_GET['action'] ?? '';
 
