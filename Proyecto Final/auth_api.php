@@ -1,5 +1,30 @@
 <?php
 header('Content-Type: application/json');
+
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if (!$error) {
+        return;
+    }
+
+    $fatalTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR];
+    if (!in_array($error['type'], $fatalTypes, true)) {
+        return;
+    }
+
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+    }
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Fatal PHP error: ' . $error['message'],
+        'file' => basename($error['file'] ?? ''),
+        'line' => $error['line'] ?? null,
+    ]);
+});
+
 require_once 'db_config.php';
 
 $action = $_GET['action'] ?? '';

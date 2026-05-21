@@ -476,7 +476,8 @@ class AuthSystem {
         try {
             result = raw ? JSON.parse(raw) : {};
         } catch (error) {
-            throw new Error(`Respuesta invalida del servidor (${resp.status})`);
+            const serverText = raw ? raw.replace(/\s+/g, ' ').trim().slice(0, 220) : '';
+            throw new Error(serverText || `Respuesta invalida del servidor (${resp.status})`);
         }
 
         if (!resp.ok) {
