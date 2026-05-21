@@ -2,7 +2,8 @@
 header('Content-Type: application/json');
 
 function envValue($key) {
-    return $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key) ?: null;
+    $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+    return ($value === false || $value === '') ? null : $value;
 }
 
 function parseDatabaseUrl($url) {
@@ -27,15 +28,50 @@ function parseDatabaseUrl($url) {
     ];
 }
 
+function isRailwayEnvironment() {
+    return envValue('RAILWAY_ENVIRONMENT') !== null
+        || envValue('RAILWAY_PROJECT_ID') !== null
+        || envValue('RAILWAY_SERVICE_ID') !== null;
+}
+
 $dbUrl = envValue('MYSQL_URL') ?? envValue('DATABASE_URL');
 $dbUrlConfig = parseDatabaseUrl($dbUrl);
 
-$host = $dbUrlConfig['host'] ?? envValue('MYSQLHOST') ?? 'localhost';
-$db = $dbUrlConfig['db'] ?? envValue('MYSQLDATABASE') ?? 'gamehub_db';
-$user = $dbUrlConfig['user'] ?? envValue('MYSQLUSER') ?? 'root';
-$pass = $dbUrlConfig['pass'] ?? envValue('MYSQLPASSWORD') ?? '';
-$port = $dbUrlConfig['port'] ?? envValue('MYSQLPORT') ?? '3306';
+$host = $dbUrlConfig['host']
+    ?? envValue('MYSQLHOST')
+    ?? envValue('DB_HOST')
+    ?? (isRailwayEnvironment() ? null : '127.0.0.1');
+
+$db = $dbUrlConfig['db']
+    ?? envValue('MYSQLDATABASE')
+    ?? envValue('DB_NAME')
+    ?? 'gamehub_db';
+
+$user = $dbUrlConfig['user']
+    ?? envValue('MYSQLUSER')
+    ?? envValue('DB_USER')
+    ?? 'root';
+
+$pass = $dbUrlConfig['pass']
+    ?? envValue('MYSQLPASSWORD')
+    ?? envValue('DB_PASSWORD')
+    ?? '';
+
+$port = $dbUrlConfig['port']
+    ?? envValue('MYSQLPORT')
+    ?? envValue('DB_PORT')
+    ?? '3306';
+
 $charset = $dbUrlConfig['charset'] ?? 'utf8mb4';
+
+if (!$host) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'DB Connection Failed: faltan variables de entorno de MySQL en Railway (MYSQLHOST/MYSQL_URL).'
+    ]);
+    exit;
+}
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 $options = [
@@ -51,6 +87,12 @@ try {
     echo json_encode([
         'success' => false,
         'message' => 'DB Connection Failed: ' . $e->getMessage(),
+        'debug' => [
+            'host' => $host,
+            'port' => $port,
+            'database' => $db,
+            'railway' => isRailwayEnvironment()
+        ]
     ]);
     exit;
 }
