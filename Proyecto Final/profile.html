@@ -1206,7 +1206,7 @@
     <!-- =====================================================================================
          SCRIPTS
     ====================================================================================== -->
-    <script src="auth.js?v=3.1" defer></script>
+    <script src="auth.js?v=3.2" defer></script>
 
     <script>
         // ============================================================
@@ -1214,13 +1214,29 @@
         // ============================================================
 
         const SESSION_KEY = 'arcade_session';
+        const LEGACY_SESSION_KEY = 'arcade_user_session';
+
+        function getStoredSessionUser() {
+            const currentSession = localStorage.getItem(SESSION_KEY);
+            if (currentSession) {
+                return currentSession;
+            }
+
+            const legacySession = localStorage.getItem(LEGACY_SESSION_KEY);
+            if (legacySession) {
+                localStorage.setItem(SESSION_KEY, legacySession);
+                return legacySession;
+            }
+
+            return null;
+        }
 
         /**
          * Obtiene el usuario de la sesión y carga sus datos desde la API.
          * Si no hay sesión activa, redirige al index.
          */
         async function loadProfile() {
-            const username = localStorage.getItem(SESSION_KEY);
+            const username = getStoredSessionUser();
 
             if (!username) {
                 // No hay sesión → redirigir al inicio
@@ -1451,7 +1467,7 @@
          * Realiza la petición de búsqueda de usuarios a la API.
          */
         async function searchFriends(query) {
-            const username = localStorage.getItem(SESSION_KEY);
+            const username = getStoredSessionUser();
             if (!username) return;
 
             try {
@@ -1492,7 +1508,7 @@
          * Envía una solicitud de amistad.
          */
         async function sendFriendRequest(friendUsername) {
-            const username = localStorage.getItem(SESSION_KEY);
+            const username = getStoredSessionUser();
             if (!username) return;
 
             const btn = document.getElementById(`add-btn-${friendUsername}`);
@@ -1538,7 +1554,7 @@
          * Carga la lista de amigos y actualiza la sección Friends en el panel Identity.
          */
         async function loadFriendsList() {
-            const username = localStorage.getItem(SESSION_KEY);
+            const username = getStoredSessionUser();
             if (!username) return;
 
             try {
@@ -1591,7 +1607,7 @@
          * Acepta una solicitud de amistad pendiente.
          */
         async function acceptFriendRequest(friendUsername) {
-            const username = localStorage.getItem(SESSION_KEY);
+            const username = getStoredSessionUser();
             if (!username) return;
 
             try {

@@ -373,7 +373,7 @@ class AuthSystem {
 
         document.getElementById('viewProfileBtn').onclick = () => {
             this.closeAllModals();
-            window.location.href = 'profile.html';
+            window.location.href = 'profile.html?v=3.2';
         };
 
         ['loginUser', 'loginPass'].forEach(id => {
