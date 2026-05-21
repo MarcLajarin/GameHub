@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+ini_set('default_socket_timeout', '5');
 
 function envValue($key) {
     $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
@@ -34,35 +35,47 @@ function isRailwayEnvironment() {
         || envValue('RAILWAY_SERVICE_ID') !== null;
 }
 
-$dbUrl = envValue('MYSQL_URL') ?? envValue('DATABASE_URL');
+$dbUrl = envValue('MYSQL_URL')
+    ?? envValue('MYSQL_PUBLIC_URL')
+    ?? envValue('DATABASE_URL');
 $dbUrlConfig = parseDatabaseUrl($dbUrl);
 
-$host = $dbUrlConfig['host']
-    ?? envValue('MYSQLHOST')
+$host = envValue('MYSQLHOST')
     ?? envValue('DB_HOST')
+    ?? $dbUrlConfig['host']
     ?? (isRailwayEnvironment() ? null : '127.0.0.1');
 
-$db = $dbUrlConfig['db']
-    ?? envValue('MYSQLDATABASE')
+$db = envValue('MYSQLDATABASE')
     ?? envValue('DB_NAME')
+    ?? $dbUrlConfig['db']
     ?? 'gamehub_db';
 
-$user = $dbUrlConfig['user']
-    ?? envValue('MYSQLUSER')
+$user = envValue('MYSQLUSER')
     ?? envValue('DB_USER')
+    ?? $dbUrlConfig['user']
     ?? 'root';
 
-$pass = $dbUrlConfig['pass']
-    ?? envValue('MYSQLPASSWORD')
+$pass = envValue('MYSQLPASSWORD')
     ?? envValue('DB_PASSWORD')
+    ?? $dbUrlConfig['pass']
     ?? '';
 
-$port = $dbUrlConfig['port']
-    ?? envValue('MYSQLPORT')
+$port = envValue('MYSQLPORT')
     ?? envValue('DB_PORT')
+    ?? $dbUrlConfig['port']
     ?? '3306';
 
 $charset = $dbUrlConfig['charset'] ?? 'utf8mb4';
+
+if ($host && str_contains($host, '${{')) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'DB Connection Failed: la variable MYSQLHOST en Railway no se ha resuelto correctamente.',
+        'debug' => ['host' => $host]
+    ]);
+    exit;
+}
 
 if (!$host) {
     http_response_code(500);
@@ -78,6 +91,7 @@ $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES => false,
+    PDO::ATTR_TIMEOUT => 5,
 ];
 
 try {
