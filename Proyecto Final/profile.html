@@ -1206,7 +1206,7 @@
     <!-- =====================================================================================
          SCRIPTS
     ====================================================================================== -->
-    <script src="auth.js?v=3.2" defer></script>
+    <script src="auth.js?v=3.3" defer></script>
 
     <script>
         // ============================================================
@@ -1217,6 +1217,12 @@
         const LEGACY_SESSION_KEY = 'arcade_user_session';
 
         function getStoredSessionUser() {
+            const urlUser = new URLSearchParams(window.location.search).get('user');
+            if (urlUser) {
+                localStorage.setItem(SESSION_KEY, urlUser);
+                return urlUser;
+            }
+
             const currentSession = localStorage.getItem(SESSION_KEY);
             if (currentSession) {
                 return currentSession;
