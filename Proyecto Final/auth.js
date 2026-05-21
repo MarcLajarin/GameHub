@@ -801,7 +801,14 @@ class AuthSystem {
 
     logout() {
         localStorage.removeItem(this.sessionKey);
+        localStorage.removeItem('arcade_user_session');
+        localStorage.removeItem('arcade_points');
         this.updateUI(null);
+
+        const currentPath = window.location.pathname.toLowerCase();
+        if (currentPath.endsWith('/profile.html') || currentPath.endsWith('profile.html')) {
+            window.location.href = 'index.php?v=3.3';
+        }
     }
 
     updateUI(username) {
