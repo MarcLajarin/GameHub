@@ -392,12 +392,8 @@ class AuthSystem {
 
         document.getElementById('viewProfileBtn').onclick = () => {
             this.closeAllModals();
-            const currentUser = this.getSession();
             const profileUrl = new URL('profile.html', window.location.href);
-            profileUrl.searchParams.set('v', '3.3');
-            if (currentUser) {
-                profileUrl.searchParams.set('user', currentUser);
-            }
+            profileUrl.searchParams.set('v', '3.5');
             window.location.href = profileUrl.toString();
         };
 

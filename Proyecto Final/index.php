@@ -348,7 +348,7 @@
          SCRIPTS
          Scripts cargados al final para no bloquear el renderizado.
     ====================================================================================== -->
-    <script src="auth.js?v=3.4" defer></script>
+    <script src="auth.js?v=3.5" defer></script>
     <script src="gallery.js?v=2.0" defer></script>
 </body>
 
