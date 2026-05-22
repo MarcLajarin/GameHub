@@ -756,6 +756,37 @@ class AuthSystem {
         if (overlay) overlay.classList.remove('active');
     }
 
+    validateRegisterData(data) {
+        const lettersOnlyPattern = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s]{3,}$/;
+        const phonePattern = /^\d{9,12}$/;
+
+        if (!data.nombre || !data.apellidos || !data.email || !data.usuario || !data.password) {
+            return "Required fields missing.";
+        }
+
+        if (!lettersOnlyPattern.test(data.nombre)) {
+            return "Name must contain only letters and be at least 3 characters.";
+        }
+
+        if (!lettersOnlyPattern.test(data.apellidos)) {
+            return "Surname must contain only letters and be at least 3 characters.";
+        }
+
+        if (!phonePattern.test(data.telefono)) {
+            return "Phone must contain 9 to 12 digits.";
+        }
+
+        if (data.email.length <= 5 || !data.email.includes('@')) {
+            return "Email must contain @ and be longer than 5 characters.";
+        }
+
+        if (data.password !== data.confirm) {
+            return "Passwords mismatch.";
+        }
+
+        return null;
+    }
+
     async performRegister() {
         const data = {
             nombre: document.getElementById('regName').value.trim(),
@@ -768,15 +799,11 @@ class AuthSystem {
         };
         const error = document.getElementById('regError');
 
-        if (!data.nombre || !data.usuario || !data.password) {
-            error.textContent = "Required fields missing.";
+        const validationError = this.validateRegisterData(data);
+        if (validationError) {
+            error.textContent = validationError;
             error.style.display = 'block';
             return;
-        }
-        if (data.password !== data.confirm) { 
-            error.textContent = "Passwords mismatch."; 
-            error.style.display = 'block';
-            return; 
         }
 
         try {
@@ -906,5 +933,97 @@ if (!document.getElementById('arcade-auth-animations')) {
     `;
     document.head.appendChild(style);
 }
+
+if (!document.getElementById('arcade-auth-invalid-style')) {
+    const invalidStyle = document.createElement('style');
+    invalidStyle.id = 'arcade-auth-invalid-style';
+    invalidStyle.textContent = `
+        .auth-form-group input.invalid {
+            border-color: #ff0055 !important;
+            box-shadow: 0 0 0 1px rgba(255, 0, 85, 0.35);
+        }
+    `;
+    document.head.appendChild(invalidStyle);
+}
+
+AuthSystem.prototype.clearRegisterFieldErrors = function () {
+    ['regName', 'regSurname', 'regPhone', 'regEmail', 'regUser', 'regPass', 'regConfirm'].forEach((id) => {
+        document.getElementById(id)?.classList.remove('invalid');
+    });
+};
+
+AuthSystem.prototype.markRegisterFieldError = function (fieldId, message) {
+    const error = document.getElementById('regError');
+    if (fieldId) {
+        document.getElementById(fieldId)?.classList.add('invalid');
+    }
+    if (error) {
+        error.textContent = message;
+        error.style.display = 'block';
+    }
+};
+
+AuthSystem.prototype.validateRegisterData = function (data) {
+    const lettersOnlyPattern = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s]{3,}$/;
+    const phonePattern = /^\d{9,12}$/;
+
+    if (!data.nombre || !data.apellidos || !data.email || !data.usuario || !data.password) {
+        return { message: 'Required fields missing.' };
+    }
+    if (!lettersOnlyPattern.test(data.nombre)) {
+        return { field: 'regName', message: 'Name must contain only letters and be at least 3 characters.' };
+    }
+    if (!lettersOnlyPattern.test(data.apellidos)) {
+        return { field: 'regSurname', message: 'Surname must contain only letters and be at least 3 characters.' };
+    }
+    if (!phonePattern.test(data.telefono)) {
+        return { field: 'regPhone', message: 'Phone must contain 9 to 12 digits.' };
+    }
+    if (data.email.length <= 5 || !data.email.includes('@')) {
+        return { field: 'regEmail', message: 'Email must contain @ and be longer than 5 characters.' };
+    }
+    if (data.password !== data.confirm) {
+        return { field: 'regConfirm', message: 'Passwords mismatch.' };
+    }
+    return null;
+};
+
+AuthSystem.prototype.performRegister = async function () {
+    const data = {
+        nombre: document.getElementById('regName').value.trim(),
+        apellidos: document.getElementById('regSurname').value.trim(),
+        telefono: document.getElementById('regPhone').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        usuario: document.getElementById('regUser').value.trim(),
+        password: document.getElementById('regPass').value,
+        confirm: document.getElementById('regConfirm').value
+    };
+
+    this.clearRegisterFieldErrors();
+
+    const validationError = this.validateRegisterData(data);
+    if (validationError) {
+        this.markRegisterFieldError(validationError.field, validationError.message);
+        return;
+    }
+
+    try {
+        const result = await this.fetchJson(`${this.getAuthApiPath()}?action=register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (result.success) {
+            localStorage.setItem(this.sessionKey, data.usuario);
+            this.updateUI(data.usuario);
+            this.closeAllModals();
+        } else {
+            this.markRegisterFieldError(result.field, result.message);
+        }
+    } catch (e) {
+        this.markRegisterFieldError(null, e.message || 'Network error.');
+    }
+};
 
 new AuthSystem();

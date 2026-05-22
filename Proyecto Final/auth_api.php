@@ -57,9 +57,41 @@ function registerUser($pdo, $data) {
         foreach ($requiredFields as $field) {
             if (!isset($data[$field]) || trim((string) $data[$field]) === '') {
                 http_response_code(400);
-                echo json_encode(['success' => false, 'message' => "Missing field: $field"]);
+                echo json_encode(['success' => false, 'field' => $field, 'message' => "Missing field: $field"]);
                 return;
             }
+        }
+
+        $nombre = trim((string) $data['nombre']);
+        $apellidos = trim((string) $data['apellidos']);
+        $telefono = trim((string) ($data['telefono'] ?? ''));
+        $email = trim((string) $data['email']);
+        $usuario = trim((string) $data['usuario']);
+        $password = (string) $data['password'];
+
+        $lettersOnlyPattern = '/^[A-Za-zÀ-ÿñÑ\s]{3,}$/u';
+        if (!preg_match($lettersOnlyPattern, $nombre)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'field' => 'regName', 'message' => 'Name must contain only letters and be at least 3 characters.']);
+            return;
+        }
+
+        if (!preg_match($lettersOnlyPattern, $apellidos)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'field' => 'regSurname', 'message' => 'Surname must contain only letters and be at least 3 characters.']);
+            return;
+        }
+
+        if (!preg_match('/^\d{9,12}$/', $telefono)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'field' => 'regPhone', 'message' => 'Phone must contain 9 to 12 digits.']);
+            return;
+        }
+
+        if (strlen($email) <= 5 || strpos($email, '@') === false || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'field' => 'regEmail', 'message' => 'Email must contain @ and be longer than 5 characters.']);
+            return;
         }
 
         $stmt = $pdo->prepare(
@@ -67,18 +99,33 @@ function registerUser($pdo, $data) {
              VALUES (?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
-            $data['nombre'],
-            $data['apellidos'],
-            $data['telefono'] ?? null,
-            $data['email'],
-            $data['usuario'],
-            $data['password']
+            $nombre,
+            $apellidos,
+            $telefono,
+            $email,
+            $usuario,
+            $password
         ]);
 
         echo json_encode(['success' => true, 'message' => 'User registered']);
     } catch (\Throwable $e) {
+        $message = $e->getMessage();
+        $field = null;
+
+        if ($e instanceof \PDOException && ($e->errorInfo[1] ?? null) === 1062) {
+            if (str_contains($message, 'usuarios.email')) {
+                $field = 'regEmail';
+                $message = 'This email is already registered.';
+            } elseif (str_contains($message, 'usuarios.usuario')) {
+                $field = 'regUser';
+                $message = 'This username is already registered.';
+            } else {
+                $message = 'This record already exists.';
+            }
+        }
+
         http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'Registration failed: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'field' => $field, 'message' => $message]);
     }
 }
 
