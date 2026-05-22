@@ -23,12 +23,13 @@ export class SolitaireGame {
         this.tableau = [[], [], [], [], [], [], []];
         this.recycles = 0;
 
-        // Deal to Tableau
-        for (let i = 0; i < 7; i++) {
-            for (let j = i; j < 7; j++) {
+        // Deal to Tableau using standard Klondike rules:
+        // column 1 gets 1 card, column 2 gets 2 cards, etc.
+        for (let columnIndex = 0; columnIndex < 7; columnIndex++) {
+            for (let cardIndex = 0; cardIndex <= columnIndex; cardIndex++) {
                 const card = this.deck.deal();
-                if (i === j) card.faceUp = true; // Top card face up
-                this.tableau[j].push(card);
+                card.faceUp = cardIndex === columnIndex;
+                this.tableau[columnIndex].push(card);
             }
         }
 

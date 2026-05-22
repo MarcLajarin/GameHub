@@ -10,8 +10,8 @@
     --text-secondary: #a0a0b0;
 
     /* Game Specific */
-    --card-width: 80px;
-    --card-height: 120px;
+    --card-width: clamp(56px, 7vw, 80px);
+    --card-height: clamp(84px, 10.5vw, 120px);
     --slot-border: rgba(0, 243, 255, 0.3);
 }
 
@@ -24,7 +24,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-image:
         radial-gradient(circle at 15% 20%, var(--accent-cyan-dim) 0%, transparent 25%),
         radial-gradient(circle at 85% 80%, rgba(188, 19, 254, 0.05) 0%, transparent 25%);
@@ -34,6 +35,7 @@ body {
     width: 100%;
     max-width: 1000px;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 header {
@@ -79,6 +81,7 @@ h1 {
     height: 700px;
     position: relative;
     backdrop-filter: blur(10px);
+    overflow: auto;
 }
 
 /* Areas */
@@ -86,6 +89,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 40px;
+    gap: 20px;
 }
 
 .stock-waste-area {
@@ -102,12 +106,15 @@ h1 {
     display: flex;
     justify-content: space-between;
     height: 100%;
+    gap: 12px;
+    min-width: fit-content;
 }
 
 .column {
     width: var(--card-width);
     position: relative;
     min-height: 200px;
+    flex: 0 0 var(--card-width);
 }
 
 /* Cards & Piles */
@@ -238,6 +245,48 @@ h1 {
 
 .center-suit {
     font-size: 2.2rem;
+}
+
+@media (max-width: 1100px) {
+    .game-container {
+        max-width: 100%;
+        padding: 16px;
+    }
+
+    .board {
+        height: auto;
+        min-height: 640px;
+        padding: 20px;
+    }
+
+    .tableau-area {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 820px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .top-row {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 24px;
+    }
+
+    .stock-waste-area,
+    .foundations-area {
+        gap: 12px;
+    }
+
+    .board {
+        min-height: 0;
+        padding: 16px;
+    }
 }
 
 /* --- DIFFICULTY SELECTOR --- */
