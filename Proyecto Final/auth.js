@@ -219,11 +219,19 @@ class AuthSystem {
             .auth-error { color: #ff0055; margin-top: 15px; font-size: 0.8rem; display: none; }
             
             /* --- TOAST --- */
-            .arcade-toast {
+            .arcade-toast-stack {
                 position: fixed;
-                bottom: 30px;
                 left: 50%;
+                bottom: 30px;
                 transform: translateX(-50%);
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+                z-index: 11000;
+                pointer-events: none;
+            }
+            .arcade-toast {
                 background: rgba(0, 243, 255, 0.1);
                 border: 1px solid var(--accent-cyan, #00f3ff);
                 color: white;
@@ -234,8 +242,19 @@ class AuthSystem {
                 font-size: 0.9rem;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.5);
                 animation: toastIn 0.5s ease forwards;
+                pointer-events: auto;
             }
-            @keyframes toastIn { from { bottom: -50px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+            .arcade-toast.remove {
+                animation: toastOut 0.35s ease forwards;
+            }
+            @keyframes toastIn {
+                from { opacity: 0; transform: translateY(20px) scale(0.96); }
+                to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            @keyframes toastOut {
+                from { opacity: 1; transform: translateY(0) scale(1); }
+                to { opacity: 0; transform: translateY(12px) scale(0.96); }
+            }
 
             /* --- GAME OVER WHISPER --- */
             .game-over-overlay {
@@ -646,13 +665,26 @@ class AuthSystem {
     }
 
     showToast(message) {
+        let stack = document.getElementById('arcade-toast-stack');
+        if (!stack) {
+            stack = document.createElement('div');
+            stack.id = 'arcade-toast-stack';
+            stack.className = 'arcade-toast-stack';
+            document.body.appendChild(stack);
+        }
+
         const toast = document.createElement('div');
         toast.className = 'arcade-toast';
         toast.innerHTML = `<span>💎</span> ${message}`;
-        document.body.appendChild(toast);
+        stack.appendChild(toast);
 
         setTimeout(() => toast.classList.add('remove'), 2000);
-        setTimeout(() => toast.remove(), 2600);
+        setTimeout(() => {
+            toast.remove();
+            if (stack && stack.childElementCount === 0) {
+                stack.remove();
+            }
+        }, 2400);
     }
 
     async openDashboard() {
