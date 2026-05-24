@@ -882,7 +882,7 @@
                     </a>
                 </div>
 
-                <div class="search-bar">
+                <div class="search-bar" style="display: none;" aria-hidden="true">
                     <span class="search-icon">🔍</span>
                     <input type="text" placeholder="Discover any World, challenges ...">
                 </div>
@@ -890,9 +890,9 @@
 
             <!-- Centro: Navegación -->
             <nav class="main-nav">
-                <a href="index.php" class="nav-link">Start page</a>
-                <a href="#" class="nav-link">Games</a>
-                <a href="#" class="nav-link">About</a>
+                <a href="index.php#games" class="nav-link">Juegos</a>
+                <a href="#identity" class="nav-link active">Perfil</a>
+                <a href="#leaderboards" class="nav-link">LaderBoard</a>
             </nav>
 
             <!-- Derecha: Acciones Usuario -->
@@ -1146,9 +1146,9 @@
             </div>
 
             <div class="footer-links">
-                <a href="index.php">Start page</a>
-                <a href="#">Games</a>
-                <a href="#">About</a>
+                <a href="index.php#games">Juegos</a>
+                <a href="#identity">Perfil</a>
+                <a href="#leaderboards">LaderBoard</a>
             </div>
 
             <div class="footer-partners">
@@ -1375,7 +1375,7 @@
         /**
          * Cambia el panel de contenido activo según el tab seleccionado.
          */
-        function showTab(tab) {
+        function showTab(tab, syncHash = true) {
             // Ocultar todos los paneles
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             // Desactivar todos los items del nav
@@ -1386,9 +1386,41 @@
             const btn = document.getElementById(`tab-${tab}-btn`);
             if (panel) panel.classList.add('active');
             if (btn) btn.classList.add('active');
+
+            document.querySelectorAll('.main-nav .nav-link').forEach(link => link.classList.remove('active'));
+
+            const profileNav = document.querySelector('.main-nav .nav-link[href="#identity"]');
+            const leaderboardNav = document.querySelector('.main-nav .nav-link[href="#leaderboards"]');
+
+            if (tab === 'leaderboards') {
+                if (leaderboardNav) leaderboardNav.classList.add('active');
+            } else {
+                if (profileNav) profileNav.classList.add('active');
+            }
+
+            if (syncHash) {
+                const targetHash = tab === 'leaderboards' ? '#leaderboards' : tab === 'achievements' ? '#achievements' : '#identity';
+                if (window.location.hash !== targetHash) {
+                    history.replaceState(null, '', targetHash);
+                }
+            }
         }
 
         // ---- TOGGLE SECCIÓN AMIGOS ----
+
+        function syncProfileSectionFromHash() {
+            if (window.location.hash === '#leaderboards') {
+                showTab('leaderboards', false);
+                return;
+            }
+
+            if (window.location.hash === '#achievements') {
+                showTab('achievements', false);
+                return;
+            }
+
+            showTab('identity', false);
+        }
 
         function toggleFriends() {
             const body = document.getElementById('friends-body');
@@ -1423,9 +1455,11 @@
                 });
             }
 
-            // Cargar perfil al arrancar
+            syncProfileSectionFromHash();
             loadProfile();
         });
+
+        window.addEventListener('hashchange', syncProfileSectionFromHash);
 
         // ============================================================
         // LÓGICA DE BÚSQUEDA DE AMIGOS

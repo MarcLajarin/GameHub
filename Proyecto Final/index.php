@@ -50,7 +50,7 @@
                 </div>
 
                 <!-- Barra de Búsqueda -->
-                <div class="search-bar">
+                <div class="search-bar" style="display: none;" aria-hidden="true">
                     <span class="search-icon">🔍</span>
                     <input type="text" placeholder="Discover any World, challenges ...">
                 </div>
@@ -58,9 +58,9 @@
 
             <!-- Centro: Enlaces de Navegación -->
             <nav class="main-nav">
-                <a href="#" class="nav-link active">Start page</a>
-                <a href="#" class="nav-link">Games</a>
-                <a href="#" class="nav-link">About</a>
+                <a href="#games" class="nav-link active">Juegos</a>
+                <a href="profile.html#identity" class="nav-link">Perfil</a>
+                <a href="profile.html#leaderboards" class="nav-link">LaderBoard</a>
             </nav>
 
             <!-- Lado Derecho: Controles de Usuario (Notificaciones, Login/Registro, Perfil) -->
@@ -103,7 +103,7 @@
              ÁREA DE CONTENIDO PRINCIPAL (MAIN)
              Contenido primario de la página, incluyendo la Galería de Juegos.
         ********************************************************************************** -->
-        <main class="content-area">
+        <main class="content-area" id="games">
 
             <!-- Contenedor del Slider de la Galería -->
             <div class="gallery-container">
@@ -263,9 +263,9 @@
 
             <!-- Centro: Enlaces -->
             <div class="footer-links">
-                <a href="#">Start page</a>
-                <a href="#">Games</a>
-                <a href="#">About</a>
+                <a href="#games">Juegos</a>
+                <a href="profile.html#identity">Perfil</a>
+                <a href="profile.html#leaderboards">LaderBoard</a>
             </div>
 
             <!-- Centro: Partners / Socios -->
